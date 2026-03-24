@@ -20,9 +20,9 @@ Hello, Here you can follow my way of learning and working on this project.
 - Idenify key survival columns and clinical covariates
 
 
-### Inspecting the data Task:
+## Inspecting the data Task:
 
-## Completed:
+### Completed:
 - Loaded the raw clinical dataset
 - Removed metadata rows begining with '#'
 - Parsed the file into a data frame
@@ -31,7 +31,7 @@ Hello, Here you can follow my way of learning and working on this project.
 - Examined missing values and key clinical variables
 - Saved a sample CSV in the 'clean/' folder
 
-## Observations
+### Observations
 - The dataset has 2509 observations and 24 columns
 - The main survival endpoints are OS and RFS
 - 'OS_STATUS' and 'RFS_STATUS' are text-based and need conversion into numeric event indicators
@@ -43,7 +43,7 @@ Hello, Here you can follow my way of learning and working on this project.
 - Age and NPI distributions look clinically plausible
 
 
-## Next Step
+### Next Step
 - Create a cleaning script to build 'OS_EVENT" and 'RFS_EVENT'
 - Create analysis-ready datasets for 0S and RFS
 - Standardize categorical and numeric variables
