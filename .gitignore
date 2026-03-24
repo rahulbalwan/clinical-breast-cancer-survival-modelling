@@ -1,0 +1,14 @@
+.Rhistory
+.RData
+.Rproj.user
+.DS_Store
+
+clean/*
+results/figures/*
+results/tables/*
+results/models/*
+
+!clean/.gitkeep
+!results/figures/.gitkeep
+!results/tables/.gitkeep
+!results/models/.gitkeep
