@@ -72,3 +72,33 @@ Hello, Here you can follow my way of learning and working on this project.
 ### Next Step:
 - Fit Kaplan-Meier survival curves for OS and FRS
 - Begin the first real survival analysis step
+
+
+## Kaplan-Meier Curves
+
+### Completed:
+- Implemented KM survival analysis
+- Created survival curves for:
+ - Overall Survival (OS)
+ - Relapse-Free Survival (RFS)
+- Saved plots in results/figures
+
+### Understanding:
+- Kaplan-Meier estimated survival probability over time
+- Survival curves are step functions
+- Each drop corresponds to an event
+- Confidence intervals widen as sample size decreases
+
+### Observations:
+- RFS declines faster than OS
+- This suggests relapse occurs earlier than death
+- Survival remains substantial over long follow-up
+- Late estimates are less reliable due to fewer patients
+
+### Concepts:
+- Survival = probability of being event-free
+- Event definition differs between OS and RFS
+- Time-to-event analysis is different from standard regression
+
+### Next Step:
+- Perform log-rank test to compare survival across groups
