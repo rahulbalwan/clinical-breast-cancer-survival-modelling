@@ -31,7 +31,7 @@ Hello, Here you can follow my way of learning and working on this project.
 - Examined missing values and key clinical variables
 - Saved a sample CSV in the 'clean/' folder
 
-### Observations
+### Observations:
 - The dataset has 2509 observations and 24 columns
 - The main survival endpoints are OS and RFS
 - 'OS_STATUS' and 'RFS_STATUS' are text-based and need conversion into numeric event indicators
@@ -43,7 +43,32 @@ Hello, Here you can follow my way of learning and working on this project.
 - Age and NPI distributions look clinically plausible
 
 
-### Next Step
+### Next Step:
 - Create a cleaning script to build 'OS_EVENT" and 'RFS_EVENT'
 - Create analysis-ready datasets for 0S and RFS
 - Standardize categorical and numeric variables
+
+
+## Cleaning the data
+
+### Completed:
+- Created acleaning script for survival analysis
+- Converted OS and RFS status variables into numeric event indicators
+- Converted key clinical variables to numeric format
+- Created seperate datasets for OS and RFS
+- Saved analysis-ready csv files
+
+### Understanding:
+- Survival analysis required time and event variables in machine-readable form
+- Text-based event labels must be converted to binary values
+- Missing time values make rows unusable for survival modelling
+- Different endpoints require seperate analysis datasets
+
+### Observations:
+- The OS dataset has fewer rows than the RFS dataset
+- This is expected because OS has more missing follow-up values
+- The cleaned datasets now contain 13 variables each
+
+### Next Step:
+- Fit Kaplan-Meier survival curves for OS and FRS
+- Begin the first real survival analysis step
