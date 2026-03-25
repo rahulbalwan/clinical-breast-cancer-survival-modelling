@@ -49,6 +49,12 @@ The project uses clinical breast cancer patient-level data containing:
 - Cleaned datasets created:
   - `clean/os_data.csv`
   - `clean/rfs_data.csv`  
+- Generated survival curves for OS and RFS
+- Observed:
+  - Gradual decline in overall survival
+  - Faster early decline in relapse-free survival
+- Identified clinical insight:
+  - Relapse occurs earlier than death
 
 ---
 
@@ -61,18 +67,23 @@ The project uses clinical breast cancer patient-level data containing:
 
 ---
 
+
+
 ## Next Steps
 
-- Kaplan–Meier survival analysis  
-- Log-rank testing  
+- Log-rank tests for group comparisons  
 - Cox proportional hazards modeling  
-- Model diagnostics and validation  
+- Model diagnostics and validation 
 
 ---
 
 ## Learning Approach
 
-This project is being developed incrementally over multiple days, with version control tracking each step. The focus is on understanding both the statistical concepts and their practical implementation in R.
+This project is being developed incrementally over multiple days, with version control tracking each step. The focus is on understanding both the statistical concepts and their practical implementation in R. Each step is documented with:
+- code implementation
+- statistical reasoning
+- clinical interpretation
+
 
 ---
 
