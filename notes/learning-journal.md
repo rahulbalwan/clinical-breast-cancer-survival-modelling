@@ -223,5 +223,40 @@ This suggests that:
 
 ### Next Steps
 
-- Fit stratified Cox model
+- Fit Stratified Cox model
 - Implement time-varying Cox model
+
+## Stratified Cox Model
+### Purpose
+To address proportional hazards violations observed in the baseline Cox model.
+
+### Approach
+Stratified by:
+- ER status
+- Chemotherapy
+
+### Completed:
+- Fitted a stratified Cox model
+- Stratified by ER status and chemotherapy
+- Estimated adjusted effects for key clinical variables
+
+### Learning:
+- Stratification allows different baseline hazards across groups
+- It helps handle categorical variables that violate PH assumption
+- Stratified variables are no longer interpreted via hazard ratios
+
+### Key results:
+- Age, lymph nodes, and NPI remain strong predictors
+- Radiotherapy shows a consistent protective effect
+- Model performance improved (C-index increased)
+
+### Key insight:
+- The baseline Cox model was misspecified due to PH violations
+- Stratification improved model validity and interpretability
+- Some variables are better treated as strata rather than predictors
+- Not all variables should be modeled with fixed hazard ratios, some require flexible baseline risk structures.
+
+
+### Next step:
+- Re-test PH assumption for stratified model
+- Explore time-varying Cox model
