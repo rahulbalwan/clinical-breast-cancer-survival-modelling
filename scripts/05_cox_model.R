@@ -25,7 +25,7 @@ model_data <- os_data %>%
   na.omit()
 
 # Fit Cox proportional hazards model
-cox_fit <- coxph(Surv(OS_MONTHS, OS_EVENT) ~ AGE_AT_DIAGNOSIS + LYMPH_NODES_EXAMINED_POSITIVE + NPI + ER_IHC + HORMONE_THERAPY + CHEMOTHERAPY + RADIO_THERAPY + HER2_SNP6 + CELLULARITY, data = model_data)
+cox_fit <- coxph(Surv(OS_MONTHS, OS_EVENT) ~ AGE_AT_DIAGNOSIS + LYMPH_NODES_EXAMINED_POSITIVE + NPI + ER_IHC + HORMONE_THERAPY + CHEMOTHERAPY + RADIO_THERAPY + HER2_SNP6 + CELLULARITY, data = model_data, x = TRUE, y = TRUE, model = TRUE)
 
 # View summary of the Cox model
 summary_cox_fit <- summary(cox_fit)
