@@ -155,11 +155,28 @@ Fitted a multivariable Cox model including clinical and treatment variables.
 
 > The baseline Cox proportional hazards model is not fully valid as a final model due to violation of the proportional hazards assumption.
 
+### Task 8: Stratified Cox Model
+- Addressed PH violations using stratification
+- Stratified by:
+  - ER status
+  - Chemotherapy
+
+### ** Results **
+- Improved model performance (C-index ≈ 0.672)
+- Stable effects for:
+  - Age
+  - Lymph nodes
+  - NPI
+  - Radiotherapy
+
+### Key Insight
+- Stratification improved model validity by allowing different baseline hazards
+- Some variables are better modeled as strata rather than fixed effects
+
 ---
 
 ## Next Steps
 
-* Stratified Cox model (handle categorical PH violations)
 * Time-varying Cox model (handle continuous violations)
 * Penalized Cox regression (feature selection)
 * Random Survival Forest (machine learning approach)
