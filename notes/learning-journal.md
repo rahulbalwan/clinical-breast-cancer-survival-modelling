@@ -139,3 +139,44 @@ Hello, Here you can follow my way of learning and working on this project.
 ### Next Step:
 - Build Cox Proportional hazards model
 - Estimate adjusted effects of predictors on survival
+
+## Cox proportional hazards model
+
+### Completed:
+- Fitted multivariate Cox proportional hazards model
+- Included demographic, clinical, and treament variables
+- Evaluated hazard ratios and statistical significance
+- Assessed model performance using concordance index
+
+### Understanding:
+- Cox regression estimated independent effects of predictors
+- Hazard ratios quantify relative risk
+- Adjusted models can change conclusions from univariable tests
+
+### Key results:
+#### Strong predictors -
+- Age: HR = 1.04 ---- increased risk with age
+- Lymph nodes: HR = 1.05 ---- higher tumor burden increases risk
+- NPI: HR = 1.20 ---- strong prognostic factor
+
+#### Treatment variables -
+- Chemotherapy: HR = 1.54 (higher hazard)
+   - Likely confounding by indication
+- Radiotherapy: HR = 0.74 (proactive)
+
+#### Non-significant variables -
+- ER status
+- Hormone therapy
+- Cellularity
+
+### Model performance:
+- C-index = 0.665
+- Indicates moderate predictive ability
+
+### Key insights:
+- Log-rank test suggested hormone therapy was significant
+- Cox model showed it is not significant after adjustment
+- Demonstrates the importance of controlling for confounding 
+
+## Next Step:
+- Check proportional hazards assumption
