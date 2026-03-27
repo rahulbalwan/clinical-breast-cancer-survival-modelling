@@ -102,3 +102,40 @@ Hello, Here you can follow my way of learning and working on this project.
 
 ### Next Step:
 - Perform log-rank test to compare survival across groups
+
+## Log-rank test
+### Completed:
+- Performed log-rank tests to compare survival between groups
+- Compared:
+ - ER status (ER_IHC)
+ - Hormone therapy (HORMONE_THERAPY)
+- Extracted p-values and saved results
+
+### Understanding:
+- Log-rank test compared survival distrivutions between groups
+- A p-value < 0.05 indicates a statistically significant difference
+- Log-rank tests are unadjusted (don't control for confounders)
+
+### Key Results:
+#### ER Status
+- p-value = 0.11
+- No statistically significant difference in survival
+
+#### Hormone Therapy
+- p-value < 0.001
+- Strong evidence of survival difference between groups
+
+### Interpretation
+- ER status alone does not significantly seperate survival curves
+- Hormone therapy shows significant association with survival
+- However, this likely reflects confounding:
+ - Higher-risk patients may be more likely to receive treatment
+
+### Understanding:
+- Log-rank tests are useful for initial comparisons
+- They do not account for other variables
+- Multivariate modelling (Cox regression) is required
+
+### Next Step:
+- Build Cox Proportional hazards model
+- Estimate adjusted effects of predictors on survival
