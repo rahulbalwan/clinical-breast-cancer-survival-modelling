@@ -12,3 +12,6 @@ results/models/*
 !results/figures/.gitkeep
 !results/tables/.gitkeep
 !results/models/.gitkeep
+
+notes/image.png
+notes/results/
