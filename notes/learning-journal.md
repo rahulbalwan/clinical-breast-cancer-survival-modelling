@@ -180,3 +180,48 @@ Hello, Here you can follow my way of learning and working on this project.
 
 ## Next Step:
 - Check proportional hazards assumption
+
+## PH Assumption Diagnostics
+
+### Completed:
+- Tested the propotional hazards assumption using Schoenfeld residuals via `cox.zph()`
+
+### Key Findings
+
+The proportional hazards assumption was strongly violated for multiple covariates, including:
+
+- Age at diagnosis
+- NPI
+- ER status
+- Hormone therapy
+- Chemotherapy
+- HER2 subtype
+
+The global test was highly significant (p < 2e-16), confirming that the Cox model assumption does not hold globally.
+
+### Interpretation of Plots
+
+Schoenfeld residual plots showed clear time-dependent trends:
+
+- Age effect increases over time
+- Treatment effects (chemotherapy, hormone therapy) are dynamic
+- Biological markers (ER, HER2) exhibit evolving risk patterns
+
+### Clinical Insight
+
+This suggests that:
+
+- Survival risk is not constant over follow-up
+- Treatment effects may vary between early and late survival
+- Biological factors influence survival differently across time
+
+### Key Learning
+
+- Cox model assumptions must always be tested
+- Real-world clinical data often violate proportional hazards
+- Advanced models are required for valid inference
+
+### Next Steps
+
+- Fit stratified Cox model
+- Implement time-varying Cox model
