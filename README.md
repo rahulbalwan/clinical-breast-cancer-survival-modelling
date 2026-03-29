@@ -312,6 +312,26 @@ Model comparison was therefore based primarily on:
 - Calibration analysis (prediction accuracy)
 ---
 
+### ✅ Task 12: Penalized Cox Regression
+- Applied LASSO-penalized Cox regression for feature selection
+- Used cross-validation to identify the optimal penalty
+
+### Results
+Variables retained after penalization included:
+- Chemotherapy
+- Radiotherapy
+- NPI
+- ER status
+- HER2 subtype
+- Lymph node involvement
+- Age at diagnosis
+
+### Key Insight
+- Penalized Cox regression confirmed the stability of the main prognostic signals
+- Core predictors identified in earlier Cox models remained important after regularization
+
+
+
 ## Project Structure
 
 ```
