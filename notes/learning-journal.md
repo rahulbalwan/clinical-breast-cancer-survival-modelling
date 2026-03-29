@@ -304,7 +304,37 @@ To evaluate whether stratification successfully addressed proportional hazards (
 - The current model is improved but still not fully adequate
 - A more flexible modeling approach is required
 
-### Next step:
-- Implement time-varying Cox model
-- Model interactions of predictors with time (e.g., AGE × time, NPI × time)
+## Time-Varying cox model
+
+### What I did
+- Fitted a time-varying Cox model
+- Modeled age and NPI as time-dependent covariates
+- Used log(time + 1) transformation
+
+### Key results
+- AGE_AT_DIAGNOSIS shows strong time-varying effect
+- NPI shows significant time-dependent behavior
+- Lymph nodes remain stable predictor
+- Radiotherapy shows consistent protective effect
+- Chemotherapy associated with higher hazard (likely confounding)
+
+### Model performance
+- Concordance improved to 0.677
+
+### What I learned
+- Continuous predictors often violate PH assumption
+- Time-varying Cox models provide more realistic modeling
+- Hazard ratios are not always constant over time
+
+### Key insight
+- Survival risk is dynamic
+- Static Cox models can be misleading if assumptions are violated
+
+### Conclusion
+- Time-varying Cox model is the most appropriate model so far
+
+### Next step
+- Compare models formally
+- Evaluate predictive performance (C-index, AUC)
+
 
