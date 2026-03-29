@@ -256,7 +256,55 @@ Stratified by:
 - Some variables are better treated as strata rather than predictors
 - Not all variables should be modeled with fixed hazard ratios, some require flexible baseline risk structures.
 
+## PH Diagnostics After Stratified Cox Model
+
+### Purpose
+To evaluate whether stratification successfully addressed proportional hazards (PH) violations observed in the baseline Cox model.
+
+### Approach
+- Applied Schoenfeld residual-based PH tests (`cox.zph`)
+- Generated diagnostic plots for time-varying effects
+- Compared results with baseline Cox model
+
+### Completed:
+- Performed PH test on stratified Cox model
+- Generated statistical summary table
+- Plotted Schoenfeld residuals for visual inspection
+
+### Learning:
+- Stratification reduced PH violations for categorical variables (ER status, chemotherapy)
+- Continuous variables can still violate PH even after stratification
+- Schoenfeld residual plots provide intuitive insight into time-varying effects
+
+### Key results:
+- AGE_AT_DIAGNOSIS → significant violation (time-dependent effect)
+- NPI → strong violation (major time-varying predictor)
+- LYMPH_NODES_EXAMINED_POSITIVE → no strong violation
+- RADIO_THERAPY → stable over time
+- GLOBAL test → still significant (model not fully valid)
+
+### Interpretation:
+- Stratification successfully improved model validity but did not fully resolve PH violations
+- Continuous predictors such as age and NPI have effects that change over time
+- The assumption of constant hazard ratios does not hold for all variables
+
+### Key insight:
+- Stratified Cox models are effective for handling categorical PH violations
+- Continuous covariates often require explicit modeling of time-dependent effects
+- Real-world clinical risk is dynamic, not constant over time
+
+### Conceptual understanding:
+- Cox model assumes:
+  - constant hazard ratios over time
+- Your data shows:
+  - hazard ratios vary with time → violation of PH assumption
+- This is a signal to move beyond standard Cox modeling
+
+### Conclusion:
+- The current model is improved but still not fully adequate
+- A more flexible modeling approach is required
 
 ### Next step:
-- Re-test PH assumption for stratified model
-- Explore time-varying Cox model
+- Implement time-varying Cox model
+- Model interactions of predictors with time (e.g., AGE × time, NPI × time)
+
