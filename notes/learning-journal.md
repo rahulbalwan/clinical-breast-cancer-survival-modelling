@@ -369,3 +369,61 @@ To address the remaining proportional hazards (PH) violations observed in contin
 - Perform model comparison (baseline vs stratified vs time-varying)
 - Evaluate predictive performance (C-index, time-dependent AUC)
 - Assess calibration of predictions
+
+## Model Comparison
+
+### Purpose
+To compare the performance and validity of different Cox-based models developed throughout the pipeline:
+- Baseline Cox model
+- Stratified Cox model
+- Time-varying Cox model
+
+### Approach
+- Compared models using concordance index (C-index)
+- Evaluated statistical validity based on proportional hazards (PH) assumption diagnostics
+- Assessed interpretability and clinical relevance of each model
+
+### Completed:
+- Extracted C-index for all models
+- Compared model performance quantitatively
+- Reviewed assumption validity across models
+- Identified the most appropriate final model
+
+### Results:
+- Baseline Cox Model → C-index ≈ 0.665  
+- Stratified Cox Model → C-index ≈ 0.672  
+- Time-Varying Cox Model → C-index ≈ 0.677  
+
+### Interpretation:
+- Stratified Cox model improved performance by addressing categorical PH violations
+- Time-varying Cox model further improved performance by modeling dynamic effects of continuous variables
+- Incremental improvement in C-index reflects better representation of underlying survival dynamics
+
+### Key Insight:
+- Model assumptions strongly influence predictive performance
+- Addressing PH violations leads to both:
+  - improved model validity  
+  - improved discrimination (C-index)
+
+### Conceptual Understanding:
+- Baseline Cox:
+  - assumes constant hazard ratios → violated in real data
+- Stratified Cox:
+  - allows different baseline hazards for categorical variables
+- Time-varying Cox:
+  - allows coefficients to change over time → most realistic
+
+### Conclusion:
+- The time-varying Cox model is the preferred final model
+- It provides:
+  - best predictive performance  
+  - most appropriate handling of PH violations  
+  - most realistic representation of clinical risk  
+
+### Note:
+- Time-dependent AUC was not implemented due to limitations with time-varying Cox models using standard workflows
+- Model comparison was therefore based primarily on concordance and diagnostic validity
+
+### Next step:
+- Explore penalized Cox regression for feature selection and model stability
+- Extend analysis using machine learning approaches (e.g., Random Survival Forest)
