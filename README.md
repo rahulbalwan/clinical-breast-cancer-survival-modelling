@@ -208,6 +208,56 @@ The modeling pipeline now demonstrates:
 
 ---
 
+### Task 10: Time-Varying Cox Model
+- Addressed remaining PH violations using time-dependent covariates
+- Modeled dynamic effects for:
+  - Age at diagnosis
+  - Nottingham Prognostic Index (NPI)
+- Implemented using `tt()` with log(time + 1) interaction
+
+### **Results**
+- Significant time-varying effects observed for:
+  - AGE_AT_DIAGNOSIS
+  - NPI
+- Stable predictors:
+  - Lymph node involvement
+  - Radiotherapy
+- Chemotherapy associated with increased hazard (likely confounding by indication)
+- Improved model performance:
+  - C-index ≈ **0.677** (best so far)
+
+### Key Insight
+- Continuous predictors do not have constant effects over time
+- Time-varying Cox model provides a more realistic representation of survival dynamics
+- Hazard ratios in clinical data are often **time-dependent, not fixed**
+
+---
+
+## Updated Understanding
+
+The modeling pipeline now demonstrates:
+
+- Baseline Cox model → violated PH assumption  
+- Stratified Cox model → partially improved validity  
+- Time-varying Cox model → most appropriate and realistic model  
+
+This reflects a real-world clinical scenario where:
+- Risk factors evolve over time  
+- Disease progression and treatment effects are dynamic  
+- Static models may oversimplify survival behavior  
+
+---
+
+## Next Steps
+
+- Model comparison (Baseline vs Stratified vs Time-Varying)  
+- Time-dependent ROC and AUC  
+- Calibration analysis  
+- Penalized Cox regression (feature selection)  
+- Random Survival Forest (machine learning approach)  
+
+
+
 ## Next Steps
 
 - Time-varying Cox model (handle continuous violations)  
