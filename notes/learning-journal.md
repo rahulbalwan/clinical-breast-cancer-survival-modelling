@@ -427,3 +427,48 @@ To compare the performance and validity of different Cox-based models developed 
 ### Next step:
 - Explore penalized Cox regression for feature selection and model stability
 - Extend analysis using machine learning approaches (e.g., Random Survival Forest)
+
+## Penalized Cox Model
+
+### Purpose
+To assess variable stability and perform regularized feature selection using LASSO-penalized Cox regression.
+
+### Approach
+- Built a design matrix from clinical predictors
+- Applied cross-validated LASSO Cox regression using `glmnet`
+- Selected the optimal penalty using cross-validation
+
+### Completed
+- Fitted penalized Cox model
+- Generated cross-validation plot
+- Extracted non-zero coefficients
+- Saved selected variables and model objects
+
+### Learning
+- LASSO shrinks weak coefficients toward zero
+- It helps identify a reduced set of stable predictors
+- Penalized Cox complements standard Cox by focusing on robustness rather than classical inference
+
+### Key results
+Variables retained after penalization included:
+- CHEMOTHERAPYYES
+- RADIO_THERAPYYES
+- HER2_SNP6NEUTRAL
+- NPI
+- ER_IHCPositve
+- HER2_SNP6LOSS
+- LYMPH_NODES_EXAMINED_POSITIVE
+- AGE_AT_DIAGNOSIS
+
+### Interpretation
+- Age, lymph nodes, and NPI remain stable risk factors
+- Radiotherapy retains a protective direction
+- Chemotherapy remains associated with higher hazard, consistent with earlier models
+- Penalization supports the stability of the main clinical findings
+
+### Key insight
+- The core prognostic signal remains consistent across standard Cox, stratified/time-varying Cox, and penalized Cox
+- This strengthens confidence in the overall modeling conclusions
+
+### Next step
+- Explore Random Survival Forest as a machine learning survival model
