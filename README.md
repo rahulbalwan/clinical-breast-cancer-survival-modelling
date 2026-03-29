@@ -175,13 +175,46 @@ Fitted a multivariable Cox model including clinical and treatment variables.
 
 ---
 
+### Task 9: PH Diagnostics After Stratified Cox
+- Re-tested proportional hazards assumption after stratification
+- Generated Schoenfeld residual plots and statistical tests
+
+### **Results**
+- Reduced PH violations compared to baseline Cox model
+- Remaining violations:
+  - Age at diagnosis
+  - Nottingham Prognostic Index (NPI)
+- No strong violation observed for:
+  - Lymph nodes
+  - Radiotherapy
+- Global test still significant → PH assumption not fully satisfied
+
+### Key Insight
+- Stratification successfully handled categorical variables
+- Continuous predictors still exhibit time-varying effects
+- A more flexible modeling approach is required
+
+---
+
+## Current Understanding
+
+The modeling pipeline now demonstrates:
+
+- Baseline Cox model → violated PH assumption  
+- Stratified Cox model → partially improved validity  
+- Remaining issue → time-dependent effects in continuous variables  
+
+ - This reflects a realistic clinical scenario where risk factors evolve over time.
+
+---
+
 ## Next Steps
 
-* Time-varying Cox model (handle continuous violations)
-* Penalized Cox regression (feature selection)
-* Random Survival Forest (machine learning approach)
-* Time-dependent ROC analysis
-* Calibration and validation
+- Time-varying Cox model (handle continuous violations)  
+- Penalized Cox regression (feature selection)  
+- Random Survival Forest (machine learning approach)  
+- Time-dependent ROC analysis  
+- Calibration and validation  
 
 ---
 
