@@ -256,16 +256,60 @@ This reflects a real-world clinical scenario where:
 - Penalized Cox regression (feature selection)  
 - Random Survival Forest (machine learning approach)  
 
+### Task 11: Model Comparison
+- Compared performance of:
+  - Baseline Cox model  
+  - Stratified Cox model  
+  - Time-varying Cox model  
+- Evaluated using:
+  - Concordance index (C-index)
+  - Model validity (PH assumption diagnostics)
 
+### **Results**
+- Baseline Cox Model → C-index ≈ 0.665  
+- Stratified Cox Model → C-index ≈ 0.672  
+- Time-Varying Cox Model → C-index ≈ 0.677  
+
+### Key Insight
+- Addressing PH violations improves both:
+  - model validity  
+  - predictive performance  
+- Time-varying Cox model provides the most realistic representation of survival dynamics
+
+---
+
+## Updated Understanding
+
+The modeling pipeline now demonstrates:
+
+- Baseline Cox model →  violated PH assumption  
+- Stratified Cox model →  partially improved validity  
+- Time-varying Cox model →  most appropriate and realistic model  
+
+This reflects a real-world clinical scenario where:
+- Risk factors evolve over time  
+- Disease progression is dynamic  
+- Constant hazard ratios are often unrealistic  
+
+---
+
+## Note on Time-dependent AUC
+
+Time-dependent AUC was not included in this workflow because:
+- The preferred final model (time-varying Cox) uses time-dependent covariates (`tt()`)
+- Standard fixed-time AUC methods are not directly compatible with this model structure
+
+Model comparison was therefore based primarily on:
+- Concordance (C-index)
+- Assumption validity
+
+---
 
 ## Next Steps
 
-- Time-varying Cox model (handle continuous violations)  
-- Penalized Cox regression (feature selection)  
-- Random Survival Forest (machine learning approach)  
-- Time-dependent ROC analysis  
-- Calibration and validation  
-
+- Penalized Cox regression (feature selection and stability)
+- Random Survival Forest (machine learning approach)
+- Calibration analysis (prediction accuracy)
 ---
 
 ## Project Structure
