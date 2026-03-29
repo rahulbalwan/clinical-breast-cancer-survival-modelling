@@ -46,7 +46,7 @@ The project uses clinical breast cancer patient-level data containing:
 
 ---
 
-## 🚀 Current Progress
+## Current Progress
 
 ### Task 1–2: Data Inspection & Cleaning
 

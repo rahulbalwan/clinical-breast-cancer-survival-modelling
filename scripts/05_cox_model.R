@@ -53,6 +53,6 @@ cox_hr_table <- data.frame(
 dir.create("results/tables", recursive = TRUE, showWarnings = FALSE)
 write_csv(cox_coef_table, "results/tables/cox_coefficients.csv")
 write_csv(cox_hr_table, "results/tables/cox_hazard_ratios.csv")
-saveRDS(cox_fit, "results/tables/cox_model_fit.rds")
+saveRDS(cox_fit, "results/models/cox_model_fit.rds")
 
 cat("Cox model results saved in results/tables/\n")
