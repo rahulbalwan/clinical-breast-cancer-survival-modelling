@@ -311,25 +311,60 @@ Model comparison was therefore based primarily on:
 - Random Survival Forest (machine learning approach)
 - Calibration analysis (prediction accuracy)
 ---
+### Task 12: Penalized Cox Regression
 
-### ✅ Task 12: Penalized Cox Regression
-- Applied LASSO-penalized Cox regression for feature selection
-- Used cross-validation to identify the optimal penalty
+Compared variable stability and performed feature selection using:
+- LASSO-penalized Cox regression (`glmnet`)
+- Cross-validation to determine optimal penalty (λ)
+
+Evaluated using:
+- Non-zero coefficients (selected predictors)
+- Stability of predictors across penalization
 
 ### Results
+
 Variables retained after penalization included:
-- Chemotherapy
-- Radiotherapy
-- NPI
-- ER status
-- HER2 subtype
-- Lymph node involvement
-- Age at diagnosis
+- CHEMOTHERAPYYES  
+- RADIO_THERAPYYES  
+- NPI  
+- ER_IHC  
+- HER2_SNP6 (subtypes)  
+- LYMPH_NODES_EXAMINED_POSITIVE  
+- AGE_AT_DIAGNOSIS  
+
+Weak/near-zero effect:
+- CELLULARITY (minimal contribution)
 
 ### Key Insight
-- Penalized Cox regression confirmed the stability of the main prognostic signals
-- Core predictors identified in earlier Cox models remained important after regularization
 
+- Penalized Cox regression confirms the stability of core prognostic signals
+- Key predictors identified in earlier Cox models remain important after regularization
+- LASSO effectively removes weak or redundant variables while preserving strong clinical signals
+
+---
+
+## Updated Understanding
+
+The modeling pipeline now demonstrates:
+
+- Baseline Cox model → initial relationships but violated assumptions  
+- Stratified Cox model → improved handling of categorical PH violations  
+- Time-varying Cox model → most realistic representation of survival dynamics  
+- Penalized Cox model → confirms stability and robustness of key predictors  
+
+This reflects a robust modeling framework where:
+
+- Core clinical variables consistently drive survival outcomes  
+- Model conclusions are stable across different modeling approaches  
+- Regularization supports the reliability of identified predictors  
+
+---
+
+## Next Steps
+
+- Random Survival Forest (capture non-linear effects and interactions)  
+- Calibration analysis (evaluate prediction accuracy)  
+- Final model interpretation and reporting  
 
 
 ## Project Structure
