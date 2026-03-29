@@ -19,6 +19,9 @@ model_data <- os_data %>%
     select(OS_MONTHS, OS_EVENT, AGE_AT_DIAGNOSIS, LYMPH_NODES_EXAMINED_POSITIVE, NPI, RADIO_THERAPY, CHEMOTHERAPY, ER_IHC) %>%
     na.omit()
 
+write_csv(model_data, "clean/model_data.csv")
+
+
 # Fit time-varying Cox proportional hazards model
 time_varying_cox_fit <- coxph(Surv(OS_MONTHS, OS_EVENT) ~ LYMPH_NODES_EXAMINED_POSITIVE + tt(NPI) + RADIO_THERAPY + CHEMOTHERAPY + strata(ER_IHC) + tt(AGE_AT_DIAGNOSIS), data = model_data, tt = function(x, t, ...) x * log(t + 1), x = TRUE, y = TRUE)
 
