@@ -303,38 +303,69 @@ To evaluate whether stratification successfully addressed proportional hazards (
 ### Conclusion:
 - The current model is improved but still not fully adequate
 - A more flexible modeling approach is required
+## Time-Varying Cox Model
 
-## Time-Varying cox model
+### Purpose
+To address the remaining proportional hazards (PH) violations observed in continuous predictors (AGE_AT_DIAGNOSIS and NPI) after fitting the stratified Cox model.
 
-### What I did
-- Fitted a time-varying Cox model
-- Modeled age and NPI as time-dependent covariates
-- Used log(time + 1) transformation
+### Approach
+- Fitted a Cox model with time-dependent covariates using the `tt()` function
+- Modeled time interaction as:
+  - AGE_AT_DIAGNOSIS × log(time + 1)
+  - NPI × log(time + 1)
+- Retained key predictors:
+  - LYMPH_NODES_EXAMINED_POSITIVE
+  - RADIO_THERAPY
+  - CHEMOTHERAPY
+- Continued stratification by ER status
 
-### Key results
-- AGE_AT_DIAGNOSIS shows strong time-varying effect
-- NPI shows significant time-dependent behavior
-- Lymph nodes remain stable predictor
-- Radiotherapy shows consistent protective effect
-- Chemotherapy associated with higher hazard (likely confounding)
+### Completed:
+- Fitted time-varying Cox model
+- Estimated coefficients and hazard ratios
+- Saved model outputs and summary tables
+- Compared performance with previous models
 
-### Model performance
-- Concordance improved to 0.677
+### Learning:
+- Continuous predictors often exhibit time-dependent effects in survival data
+- Time-varying Cox models relax the assumption of constant hazard ratios
+- Interaction with time (e.g., log(t+1)) allows flexible modeling of dynamic risk
+- Interpretation of coefficients changes — effects are no longer static
 
-### What I learned
-- Continuous predictors often violate PH assumption
-- Time-varying Cox models provide more realistic modeling
-- Hazard ratios are not always constant over time
+### Key results:
+- AGE_AT_DIAGNOSIS → strong time-varying effect (p < 2e-16)
+- NPI → significant time-dependent effect (p < 1e-5)
+- LYMPH_NODES_EXAMINED_POSITIVE → stable predictor
+- RADIO_THERAPY → consistent protective effect
+- CHEMOTHERAPY → associated with higher hazard (likely confounding)
 
-### Key insight
-- Survival risk is dynamic
-- Static Cox models can be misleading if assumptions are violated
+### Model performance:
+- Concordance index improved to ~0.677
+- Best predictive performance among all models so far
 
-### Conclusion
-- Time-varying Cox model is the most appropriate model so far
+### Interpretation:
+- The effect of age increases over time, suggesting long-term survival is more influenced by age
+- The prognostic impact of NPI evolves during follow-up
+- Treatment effects (radiotherapy) remain stable
+- Chemotherapy effect reflects clinical selection bias rather than causal effect
 
-### Next step
-- Compare models formally
-- Evaluate predictive performance (C-index, AUC)
+### Key insight:
+- Hazard ratios are not constant in real-world clinical data
+- Static Cox models may oversimplify survival dynamics
+- Time-varying Cox models provide a more realistic representation of risk
 
+### Conceptual understanding:
+- Standard Cox:
+  - assumes β is constant
+- Time-varying Cox:
+  - allows β(t), i.e., effect changes with time
+- This aligns better with biological and clinical processes
 
+### Conclusion:
+- Time-varying Cox model resolves major remaining PH violations
+- Provides the most valid and realistic model for this dataset
+- Represents the final and most appropriate modeling approach so far
+
+### Next step:
+- Perform model comparison (baseline vs stratified vs time-varying)
+- Evaluate predictive performance (C-index, time-dependent AUC)
+- Assess calibration of predictions
