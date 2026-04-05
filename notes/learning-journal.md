@@ -472,3 +472,62 @@ Variables retained after penalization included:
 
 ### Next step
 - Explore Random Survival Forest as a machine learning survival model
+
+## Random Survival Forest
+
+### Purpose
+To extend the survival analysis pipeline using a machine learning model capable of capturing non-linear effects and interactions without relying on proportional hazards assumptions.
+
+### Approach
+- Fitted a Random Survival Forest (RSF) using clinical predictors
+- Used 500 trees with log-rank splitting rule
+- Evaluated model performance using out-of-bag (OOB) error
+- Extracted variable importance rankings
+
+### Completed
+- Trained RSF model on cleaned survival dataset
+- Computed OOB error and derived C-index
+- Generated variable importance table
+- Visualized variable importance
+
+### Learning
+- RSF does not assume proportional hazards
+- It captures non-linear relationships and interactions automatically
+- Variable importance provides a different perspective compared to regression coefficients
+- Machine learning models can complement statistical models in survival analysis
+
+### Key results
+Top predictors:
+- AGE_AT_DIAGNOSIS  
+- LYMPH_NODES_EXAMINED_POSITIVE  
+- NPI  
+
+Lower importance:
+- HER2_SNP6  
+- CHEMOTHERAPY  
+- RADIO_THERAPY  
+
+Minimal importance:
+- ER_IHC  
+- CELLULARITY  
+- HORMONE_THERAPY  
+
+Model performance:
+- C-index ≈ 0.667
+
+### Interpretation
+- Age, lymph nodes, and NPI remain the dominant predictors of survival
+- Treatment variables show lower importance compared to disease severity variables
+- RSF confirms the main findings from Cox-based models
+
+### Key insight
+- Core prognostic variables are consistent across statistical and machine learning models
+- Flexible non-linear modeling does not significantly improve performance in this dataset
+- Strong clinical signals can be captured effectively even by simpler models
+
+### Conclusion
+- Random Survival Forest validates the robustness of the main predictors
+- It serves as a complementary approach rather than outperforming Cox models
+
+### Next step
+- Perform calibration analysis to assess prediction accuracy and reliability
