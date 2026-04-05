@@ -1,446 +1,230 @@
 # Clinical Breast Cancer Survival Analysis
 
+![R](https://img.shields.io/badge/R-Statistical%20Computing-276DC3?logo=r&logoColor=white)
+![Survival Analysis](https://img.shields.io/badge/Analysis-Survival-blueviolet)
+![Machine Learning](https://img.shields.io/badge/Modeling-Machine%20Learning-orange)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
 ## Overview
 
-This repository builds an end-to-end survival analysis pipeline using clinical breast cancer data. The project is being developed incrementally from scratch to understand each stage of a survival analysis workflow in R, from raw data to advanced modeling, diagnostics, and validation.
+This repository presents an end-to-end survival analysis pipeline using clinical breast cancer data. The project is developed incrementally from scratch to understand each stage of a survival analysis workflow in R — from raw data preprocessing to advanced modeling, diagnostics, and validation.
 
-The analysis focuses on time-to-event outcomes including overall survival and relapse-free survival, integrating statistical rigor with clinical interpretation.
+The analysis focuses on time-to-event outcomes, integrating statistical rigor with clinically meaningful interpretation.
+
+---
+
+## Representative Result
+
+![Overall Survival Kaplan–Meier Curve](results/figures/km_overall_survival.png)
+
+*Kaplan–Meier estimate of overall survival in the breast cancer cohort.*
 
 ---
 
 ## Goal
 
-To develop a deep understanding of survival analysis by rebuilding the pipeline step-by-step, including:
+To build a deep, practical understanding of survival analysis by systematically implementing:
 
-* Data inspection and cleaning
-* Kaplan–Meier survival estimation
-* Log-rank hypothesis testing
-* Cox proportional hazards modeling
-* Proportional hazards diagnostics
-* Model validation and performance evaluation
-* Advanced modeling extensions
+- Data inspection and cleaning  
+- Kaplan–Meier survival estimation  
+- Log-rank hypothesis testing  
+- Cox proportional hazards modeling  
+- Proportional hazards diagnostics  
+- Model comparison and validation  
+- Advanced modeling (time-varying effects, penalization, machine learning)
 
 ---
 
 ## Dataset
 
-The project uses clinical breast cancer patient-level data containing:
+Clinical breast cancer patient-level dataset containing:
 
-* Overall Survival (OS)
-* Relapse-Free Survival (RFS)
-* Treatment variables (chemotherapy, radiotherapy, hormone therapy)
-* Prognostic markers (age, lymph nodes, Nottingham Prognostic Index)
-* Molecular and clinical subtypes
+- Overall Survival (OS)  
+- Relapse-Free Survival (RFS)  
+- Treatment variables (chemotherapy, radiotherapy, hormone therapy)  
+- Prognostic markers (age, lymph nodes, Nottingham Prognostic Index)  
+- Molecular and clinical subtypes  
 
 ### Survival Endpoints
 
-* **Overall Survival (OS)**
+**Overall Survival (OS)**  
+- Time: `OS_MONTHS`  
+- Event: `OS_EVENT` (1 = death, 0 = censored)
 
-  * Time: `OS_MONTHS`
-  * Event: `OS_EVENT` (1 = death, 0 = censored)
-
-* **Relapse-Free Survival (RFS)**
-
-  * Time: `RFS_MONTHS`
-  * Event: `RFS_EVENT` (1 = relapse, 0 = censored)
+**Relapse-Free Survival (RFS)**  
+- Time: `RFS_MONTHS`  
+- Event: `RFS_EVENT` (1 = relapse, 0 = censored)
 
 ---
 
-## Current Progress
+## Analysis Pipeline
 
 ### Task 1–2: Data Inspection & Cleaning
-
-* Loaded raw clinical dataset
-* Removed metadata and structured data
-* Identified missing values and variable types
-* Created survival-ready datasets:
-
-  * `clean/os_data.csv`
-  * `clean/rfs_data.csv`
+- Loaded and structured raw clinical dataset  
+- Handled missing values and variable types  
+- Created survival-ready datasets:
+  - `clean/os_data.csv`
+  - `clean/rfs_data.csv`
 
 ---
 
 ### Task 3: Kaplan–Meier Analysis
-
-* Estimated survival curves for:
-
-  * Overall Survival (OS)
-  * Relapse-Free Survival (RFS)
+- Estimated survival curves for OS and RFS  
 
 **Key Observations:**
-
-* OS declines gradually over time
-* RFS declines faster in early follow-up
-* Relapse tends to occur earlier than death
+- Overall survival declines gradually  
+- Relapse occurs earlier than death  
+- Early-phase differences are clinically meaningful  
 
 ---
 
 ### Task 4: Log-Rank Testing
-
-* Compared survival across groups
+- Compared survival across groups  
 
 **Results:**
-
-* ER status: not statistically significant
-* Hormone therapy: significant survival difference
+- ER status: not statistically significant  
+- Hormone therapy: significant  
 
 **Insight:**
-
-* Treatment effects may be more influential than receptor status alone
+- Treatment effects may be more influential than receptor status alone  
 
 ---
 
 ### Task 5–6: Cox Proportional Hazards Model
-
-Fitted a multivariable Cox model including clinical and treatment variables.
+- Fitted multivariable Cox model  
 
 **Significant predictors:**
+- Age at diagnosis  
+- Lymph node involvement  
+- Nottingham Prognostic Index (NPI)  
+- Chemotherapy  
+- Radiotherapy (protective)  
+- HER2 subtype  
 
-* Age at diagnosis
-* Lymph node involvement
-* Nottingham Prognostic Index (NPI)
-* Chemotherapy
-* Radiotherapy (protective effect)
-* HER2 subtype (neutral category protective)
+**Performance:**
+- C-index ≈ 0.665  
 
-**Model performance:**
-
-* Concordance index ≈ 0.665
-* Strong overall model significance
-
-**Clinical insights:**
-
-* Disease severity (NPI, lymph nodes) strongly influences survival
-* Chemotherapy associated with higher hazard (likely confounding by indication)
-* Radiotherapy shows protective effect
+**Clinical insight:**
+- Disease severity dominates survival outcomes  
+- Treatment effects are confounded by indication  
 
 ---
 
 ### Task 7: Proportional Hazards Diagnostics
-
-* Tested PH assumption using Schoenfeld residuals (`cox.zph`)
-* Generated diagnostic plots and statistical tests
+- Tested PH assumption using Schoenfeld residuals  
 
 **Results:**
+- Significant violations for multiple predictors  
+- Global test highly significant  
 
-* Significant PH violations detected for:
-
-  * Age at diagnosis
-  * Lymph nodes
-  * NPI
-  * ER status
-  * Hormone therapy
-  * Chemotherapy
-  * HER2 subtype
-
-* No strong violation for:
-
-  * Radiotherapy
-  * Cellularity
-
-* Global test highly significant → model assumption violated
+**Conclusion:**
+> Baseline Cox model is not fully valid due to PH violations  
 
 ---
-
-## Key Insights
-
-* The Cox model is statistically strong but **assumptions are violated**
-* Several predictors have **time-varying effects**
-* Clinical risk is **dynamic, not constant over time**
-* Real-world survival data rarely satisfy all model assumptions
-
----
-
-## Important Finding
-
-> The baseline Cox proportional hazards model is not fully valid as a final model due to violation of the proportional hazards assumption.
 
 ### Task 8: Stratified Cox Model
-- Addressed PH violations using stratification
-- Stratified by:
-  - ER status
-  - Chemotherapy
+- Stratified by ER status and chemotherapy  
 
-### ** Results **
-- Improved model performance (C-index ≈ 0.672)
-- Stable effects for:
-  - Age
-  - Lymph nodes
-  - NPI
-  - Radiotherapy
-
-### Key Insight
-- Stratification improved model validity by allowing different baseline hazards
-- Some variables are better modeled as strata rather than fixed effects
+**Results:**
+- Improved model performance (C-index ≈ 0.672)  
+- Better handling of categorical violations  
 
 ---
 
-### Task 9: PH Diagnostics After Stratified Cox
-- Re-tested proportional hazards assumption after stratification
-- Generated Schoenfeld residual plots and statistical tests
+### Task 9: PH Diagnostics After Stratification
+- Re-tested PH assumption  
 
-### **Results**
-- Reduced PH violations compared to baseline Cox model
-- Remaining violations:
-  - Age at diagnosis
-  - Nottingham Prognostic Index (NPI)
-- No strong violation observed for:
-  - Lymph nodes
-  - Radiotherapy
-- Global test still significant → PH assumption not fully satisfied
-
-### Key Insight
-- Stratification successfully handled categorical variables
-- Continuous predictors still exhibit time-varying effects
-- A more flexible modeling approach is required
-
----
-
-## Current Understanding
-
-The modeling pipeline now demonstrates:
-
-- Baseline Cox model → violated PH assumption  
-- Stratified Cox model → partially improved validity  
-- Remaining issue → time-dependent effects in continuous variables  
-
- - This reflects a realistic clinical scenario where risk factors evolve over time.
+**Findings:**
+- Reduced violations  
+- Remaining issues in continuous variables (age, NPI)  
 
 ---
 
 ### Task 10: Time-Varying Cox Model
-- Addressed remaining PH violations using time-dependent covariates
-- Modeled dynamic effects for:
-  - Age at diagnosis
-  - Nottingham Prognostic Index (NPI)
-- Implemented using `tt()` with log(time + 1) interaction
+- Modeled time-dependent effects using `tt()`  
 
-### **Results**
-- Significant time-varying effects observed for:
-  - AGE_AT_DIAGNOSIS
-  - NPI
-- Stable predictors:
-  - Lymph node involvement
-  - Radiotherapy
-- Chemotherapy associated with increased hazard (likely confounding by indication)
-- Improved model performance:
-  - C-index ≈ **0.677** (best so far)
+**Results:**
+- Significant time-varying effects for:
+  - Age  
+  - NPI  
+- Improved performance:
+  - C-index ≈ **0.677** (best model)  
 
-### Key Insight
-- Continuous predictors do not have constant effects over time
-- Time-varying Cox model provides a more realistic representation of survival dynamics
-- Hazard ratios in clinical data are often **time-dependent, not fixed**
+**Key Insight:**
+> Hazard ratios are not constant — risk evolves over time  
 
 ---
-
-## Updated Understanding
-
-The modeling pipeline now demonstrates:
-
-- Baseline Cox model → violated PH assumption  
-- Stratified Cox model → partially improved validity  
-- Time-varying Cox model → most appropriate and realistic model  
-
-This reflects a real-world clinical scenario where:
-- Risk factors evolve over time  
-- Disease progression and treatment effects are dynamic  
-- Static models may oversimplify survival behavior  
-
----
-
-## Next Steps
-
-- Model comparison (Baseline vs Stratified vs Time-Varying)  
-- Time-dependent ROC and AUC  
-- Calibration analysis  
-- Penalized Cox regression (feature selection)  
-- Random Survival Forest (machine learning approach)  
 
 ### Task 11: Model Comparison
-- Compared performance of:
-  - Baseline Cox model  
-  - Stratified Cox model  
-  - Time-varying Cox model  
-- Evaluated using:
-  - Concordance index (C-index)
-  - Model validity (PH assumption diagnostics)
 
-### **Results**
-- Baseline Cox Model → C-index ≈ 0.665  
-- Stratified Cox Model → C-index ≈ 0.672  
-- Time-Varying Cox Model → C-index ≈ 0.677  
+| Model | C-index |
+|------|--------|
+| Baseline Cox | ~0.665 |
+| Stratified Cox | ~0.672 |
+| Time-varying Cox | ~0.677 |
 
-### Key Insight
-- Addressing PH violations improves both:
-  - model validity  
-  - predictive performance  
-- Time-varying Cox model provides the most realistic representation of survival dynamics
+**Insight:**
+- Addressing assumptions improves both validity and performance  
+- Time-varying Cox provides the most realistic representation  
 
 ---
 
-## Updated Understanding
-
-The modeling pipeline now demonstrates:
-
-- Baseline Cox model →  violated PH assumption  
-- Stratified Cox model →  partially improved validity  
-- Time-varying Cox model →  most appropriate and realistic model  
-
-This reflects a real-world clinical scenario where:
-- Risk factors evolve over time  
-- Disease progression is dynamic  
-- Constant hazard ratios are often unrealistic  
-
----
-
-## Note on Time-dependent AUC
-
-Time-dependent AUC was not included in this workflow because:
-- The preferred final model (time-varying Cox) uses time-dependent covariates (`tt()`)
-- Standard fixed-time AUC methods are not directly compatible with this model structure
-
-Model comparison was therefore based primarily on:
-- Concordance (C-index)
-- Assumption validity
-
----
-
-## Next Steps
-
-- Penalized Cox regression (feature selection and stability)
-- Random Survival Forest (machine learning approach)
-- Calibration analysis (prediction accuracy)
----
 ### Task 12: Penalized Cox Regression
+- Applied LASSO for feature selection  
 
-Compared variable stability and performed feature selection using:
-- LASSO-penalized Cox regression (`glmnet`)
-- Cross-validation to determine optimal penalty (λ)
+**Results:**
+- Stable predictors:
+  - Age, lymph nodes, NPI  
+  - Treatment variables  
+  - HER2 subtypes  
 
-Evaluated using:
-- Non-zero coefficients (selected predictors)
-- Stability of predictors across penalization
-
-### Results
-
-Variables retained after penalization included:
-- CHEMOTHERAPYYES  
-- RADIO_THERAPYYES  
-- NPI  
-- ER_IHC  
-- HER2_SNP6 (subtypes)  
-- LYMPH_NODES_EXAMINED_POSITIVE  
-- AGE_AT_DIAGNOSIS  
-
-Weak/near-zero effect:
-- CELLULARITY (minimal contribution)
-
-### Key Insight
-
-- Penalized Cox regression confirms the stability of core prognostic signals
-- Key predictors identified in earlier Cox models remain important after regularization
-- LASSO effectively removes weak or redundant variables while preserving strong clinical signals
+**Insight:**
+> Core predictors remain stable under regularization  
 
 ---
-
-## Updated Understanding
-
-The modeling pipeline now demonstrates:
-
-- Baseline Cox model → initial relationships but violated assumptions  
-- Stratified Cox model → improved handling of categorical PH violations  
-- Time-varying Cox model → most realistic representation of survival dynamics  
-- Penalized Cox model → confirms stability and robustness of key predictors  
-
-This reflects a robust modeling framework where:
-
-- Core clinical variables consistently drive survival outcomes  
-- Model conclusions are stable across different modeling approaches  
-- Regularization supports the reliability of identified predictors  
-
----
-
-## Next Steps
-
-- Random Survival Forest (capture non-linear effects and interactions)  
-- Calibration analysis (evaluate prediction accuracy)  
-- Final model interpretation and reporting  
 
 ### Task 13: Random Survival Forest
+- Applied machine learning survival model  
 
-Extended the survival analysis pipeline using:
-- Random Survival Forest (RSF)
-- Non-linear, tree-based survival modeling
-- Variable importance analysis
+**Results:**
+- Top predictors:
+  - Age  
+  - Lymph nodes  
+  - NPI  
+- Performance:
+  - C-index ≈ 0.667  
 
-Evaluated using:
-- Out-of-bag (OOB) performance error
-- Variable importance rankings
-- Comparison with Cox-based models
-
-### Results
-
-Top predictors identified by RSF:
-- AGE_AT_DIAGNOSIS  
-- LYMPH_NODES_EXAMINED_POSITIVE  
-- NPI  
-
-Lower importance:
-- HER2_SNP6  
-- CHEMOTHERAPY  
-- RADIO_THERAPY  
-
-Minimal importance:
-- ER_IHC  
-- CELLULARITY  
-- HORMONE_THERAPY  
-
-Model performance:
-- RSF C-index ≈ 0.667
-
-### Key Insight
-
-- Random Survival Forest confirms the importance of core prognostic variables
-- Age, lymph nodes, and NPI remain the dominant survival predictors
-- Machine learning did not significantly outperform the best Cox-based model in this dataset
-- Flexible non-linear modeling supports, rather than overturns, the main clinical findings
+**Insight:**
+- ML confirms predictor importance  
+- Does not outperform well-specified Cox models  
 
 ---
-
-## Updated Understanding
-
-The modeling pipeline now demonstrates:
-
-- Baseline Cox model → initial relationships but violated assumptions  
-- Stratified Cox model → improved handling of categorical PH violations  
-- Time-varying Cox model → most realistic representation of survival dynamics  
-- Random Survival Forest → confirms variable importance under a flexible machine learning framework  
-
-This reflects a robust modeling framework where:
-
-- Core clinical predictors consistently drive survival outcomes  
-- Findings are stable across both statistical and machine learning models  
-- Increased model complexity does not necessarily improve predictive performance  
-
----
-
-## Next Steps
-
-- Calibration analysis (evaluate prediction accuracy and reliability)  
-- Final model interpretation and reporting  
 
 ### Task 14: Calibration Analysis
-- Evaluated model calibration using bootstrap resampling
-- Compared predicted vs observed survival probabilities
+- Evaluated predicted vs observed survival  
 
-### Results
-- Model shows systematic overestimation of survival probabilities
-- Calibration curve lies below the ideal line
+**Results:**
+- Model overestimates survival probability  
+- Calibration curve below ideal line  
 
-### Key Insight
-- Model has reasonable discrimination but imperfect calibration
-- Highlights the difference between ranking risk and estimating absolute probabilities
+**Insight:**
+> Good discrimination ≠ good calibration  
 
+---
+
+## Key Takeaways
+
+- Survival data often violate modeling assumptions  
+- Risk is dynamic, not constant over time  
+- Model validation is as important as model fitting  
+- Core predictors are robust across:
+  - Cox models  
+  - Penalized models  
+  - Machine learning models  
+- Increased complexity does not guarantee better performance  
+
+---
 
 ## Project Structure
 
@@ -457,38 +241,40 @@ breast-cancer-survival-analysis/
 
 ---
 
+
 ## Learning Approach
 
-This project is built incrementally with version control, focusing on:
+This project is built incrementally with a focus on:
 
-* statistical understanding
-* reproducible code
-* clinical interpretation
+- Statistical understanding  
+- Reproducible workflows  
+- Clinical interpretation  
 
-Each stage is documented with:
-
-* code implementation
-* statistical reasoning
-* clinical insights
+Each step is documented with:
+- Code  
+- Reasoning  
+- Insights  
 
 ---
 
 ## Author
 
-Rahul
+**Rahul**
 
-* MSc Medical Statistics & Health Data Science (University of Bristol, UK – Sept 2026)
-* MSc Statistics (Indian Institute of Technology Kanpur, India)
+- MSc Medical Statistics & Health Data Science  
+  *(University of Bristol, UK – Sept 2026)*  
+- MSc Statistics  
+  *(Indian Institute of Technology Kanpur, India)*  
 
 ---
 
-##  Project Vision
+## Project Vision
 
 This project aims to go beyond textbook survival analysis by:
 
-* integrating diagnostics and validation
-* addressing real-world model violations
-* combining statistical and machine learning approaches
-* building an interpretable and reproducible pipeline
+- Addressing real-world modeling challenges  
+- Integrating diagnostics and validation  
+- Combining statistical and machine learning approaches  
+- Building an interpretable and reproducible pipeline  
 
 ---

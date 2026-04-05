@@ -1,0 +1,16 @@
+# run_all.R
+
+source("scripts/00_setup.R")
+source("scripts/01_inspect_data.R")
+source("scripts/02_clean_data.R")
+source("scripts/03_kaplan_meier.R")
+source("scripts/04_logrank_test.R")
+source("scripts/05_cox_model.R")
+source("scripts/06_ph_diagnostics.R")
+source("scripts/07_stratified_cox_model.R")
+source("scripts/08_ph_stratified.R")
+source("scripts/09_time_varying_cox_model.R")
+source("scripts/10_model_comparison.R")
+source("scripts/11_penalized_cox.R")
+source("scripts/12_random_survival_forest.R")
+source("scripts/13_calibration.R")

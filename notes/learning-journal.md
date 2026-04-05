@@ -1,563 +1,444 @@
-Hello, Here you can follow my way of learning and working on this project.
-
-## Setup Tasks:
-
-### Completed:
-- Created a new project folder
-- Initialized Git
-- Setup the folder structure
-- Added the raw dataset (folder raw contains the data)
-- Created basic README file
-- Added .gitignore and placeholder tracked folders
-
-### Understanding:
-- The pipeline is organized from setup --> cleaning --> classical survival --> diagnostics --> advanced models --> validation
-- Git should start from the beginning
-- The raw dataset and the cleaned datasets should stay seperated
-
-### Next Step:
-- Inspect the raw dataset in detail
-- Idenify key survival columns and clinical covariates
-
-
-## Inspecting the data Task:
-
-### Completed:
-- Loaded the raw clinical dataset
-- Removed metadata rows begining with '#'
-- Parsed the file into a data frame
-- Inspected dimensions, column names, structure, and summary statistics
-- Checked OS and RFS survival status fields
-- Examined missing values and key clinical variables
-- Saved a sample CSV in the 'clean/' folder
-
-### Observations:
-- The dataset has 2509 observations and 24 columns
-- The main survival endpoints are OS and RFS
-- 'OS_STATUS' and 'RFS_STATUS' are text-based and need conversion into numeric event indicators
-- Several important variables contain missing values,especially 'OS_MONTHS', 'NPI', and lymph node counts
-- Predictors are a mix of numeric and categorical variables
-- 'OS_STATUS' contains '0:LIVING' and '1:DECREASED'
-- 'RFS_STATUS' contains '0:Not Recurred', '1:Recurred', and some missing values
-- 'LYMPH_NODES_EXAMINED_POSITIVE' is the correct node burden variable
-- Age and NPI distributions look clinically plausible
-
-
-### Next Step:
-- Create a cleaning script to build 'OS_EVENT" and 'RFS_EVENT'
-- Create analysis-ready datasets for 0S and RFS
-- Standardize categorical and numeric variables
-
-
-## Cleaning the data
-
-### Completed:
-- Created acleaning script for survival analysis
-- Converted OS and RFS status variables into numeric event indicators
-- Converted key clinical variables to numeric format
-- Created seperate datasets for OS and RFS
-- Saved analysis-ready csv files
-
-### Understanding:
-- Survival analysis required time and event variables in machine-readable form
-- Text-based event labels must be converted to binary values
-- Missing time values make rows unusable for survival modelling
-- Different endpoints require seperate analysis datasets
-
-### Observations:
-- The OS dataset has fewer rows than the RFS dataset
-- This is expected because OS has more missing follow-up values
-- The cleaned datasets now contain 13 variables each
-
-### Next Step:
-- Fit Kaplan-Meier survival curves for OS and FRS
-- Begin the first real survival analysis step
-
-
-## Kaplan-Meier Curves
-
-### Completed:
-- Implemented KM survival analysis
-- Created survival curves for:
- - Overall Survival (OS)
- - Relapse-Free Survival (RFS)
-- Saved plots in results/figures
-
-### Understanding:
-- Kaplan-Meier estimated survival probability over time
-- Survival curves are step functions
-- Each drop corresponds to an event
-- Confidence intervals widen as sample size decreases
-
-### Observations:
-- RFS declines faster than OS
-- This suggests relapse occurs earlier than death
-- Survival remains substantial over long follow-up
-- Late estimates are less reliable due to fewer patients
-
-### Concepts:
-- Survival = probability of being event-free
-- Event definition differs between OS and RFS
-- Time-to-event analysis is different from standard regression
-
-### Next Step:
-- Perform log-rank test to compare survival across groups
-
-## Log-rank test
-### Completed:
-- Performed log-rank tests to compare survival between groups
-- Compared:
- - ER status (ER_IHC)
- - Hormone therapy (HORMONE_THERAPY)
-- Extracted p-values and saved results
+# Survival Analysis Project — Learning Journal
 
-### Understanding:
-- Log-rank test compared survival distrivutions between groups
-- A p-value < 0.05 indicates a statistically significant difference
-- Log-rank tests are unadjusted (don't control for confounders)
+This journal documents the full analytical process of a survival analysis project, combining:
+- rigorous statistical theory  
+- detailed implementation steps  
+- empirical results  
+- critical interpretation and reflection  
 
-### Key Results:
-#### ER Status
-- p-value = 0.11
-- No statistically significant difference in survival
+The objective is not only to build models, but to develop a **deep understanding of time-to-event data, model assumptions, and real-world clinical complexity**.
 
-#### Hormone Therapy
-- p-value < 0.001
-- Strong evidence of survival difference between groups
+---
 
-### Interpretation
-- ER status alone does not significantly seperate survival curves
-- Hormone therapy shows significant association with survival
-- However, this likely reflects confounding:
- - Higher-risk patients may be more likely to receive treatment
+# 1. Project Setup & Analytical Framing
 
-### Understanding:
-- Log-rank tests are useful for initial comparisons
-- They do not account for other variables
-- Multivariate modelling (Cox regression) is required
+## Objective
+To establish a structured, reproducible, and logically sequenced workflow for survival analysis.
 
-### Next Step:
-- Build Cox Proportional hazards model
-- Estimate adjusted effects of predictors on survival
+---
 
-## Cox proportional hazards model
+## Implementation (What I did)
+I began by designing a modular pipeline reflecting the natural progression of statistical modeling:
 
-### Completed:
-- Fitted multivariate Cox proportional hazards model
-- Included demographic, clinical, and treament variables
-- Evaluated hazard ratios and statistical significance
-- Assessed model performance using concordance index
+setup → cleaning → classical survival → diagnostics → advanced models → validation  
 
-### Understanding:
-- Cox regression estimated independent effects of predictors
-- Hazard ratios quantify relative risk
-- Adjusted models can change conclusions from univariable tests
+I created the following directory structure:
+- `/raw` → immutable original dataset  
+- `/clean` → processed datasets  
+- `/results` → outputs, plots, and model summaries  
 
-### Key results:
-#### Strong predictors -
-- Age: HR = 1.04 ---- increased risk with age
-- Lymph nodes: HR = 1.05 ---- higher tumor burden increases risk
-- NPI: HR = 1.20 ---- strong prognostic factor
+Git was initialized at the very beginning to track:
+- data transformations  
+- modeling decisions  
+- iterative refinements  
 
-#### Treatment variables -
-- Chemotherapy: HR = 1.54 (higher hazard)
-   - Likely confounding by indication
-- Radiotherapy: HR = 0.74 (proactive)
+---
 
-#### Non-significant variables -
-- ER status
-- Hormone therapy
-- Cellularity
+## Results (What I got)
+- A clean, organized project structure  
+- Full version history of all steps  
+- Clear separation between raw and processed data  
 
-### Model performance:
-- C-index = 0.665
-- Indicates moderate predictive ability
+---
 
-### Key insights:
-- Log-rank test suggested hormone therapy was significant
-- Cox model showed it is not significant after adjustment
-- Demonstrates the importance of controlling for confounding 
+## Interpretation
+This setup ensures:
+- **reproducibility** → every step can be recreated  
+- **data integrity** → raw data is never overwritten  
+- **traceability** → all analytical changes are documented  
 
-## Next Step:
-- Check proportional hazards assumption
-
-## PH Assumption Diagnostics
-
-### Completed:
-- Tested the propotional hazards assumption using Schoenfeld residuals via `cox.zph()`
-
-### Key Findings
-
-The proportional hazards assumption was strongly violated for multiple covariates, including:
-
-- Age at diagnosis
-- NPI
-- ER status
-- Hormone therapy
-- Chemotherapy
-- HER2 subtype
-
-The global test was highly significant (p < 2e-16), confirming that the Cox model assumption does not hold globally.
-
-### Interpretation of Plots
-
-Schoenfeld residual plots showed clear time-dependent trends:
-
-- Age effect increases over time
-- Treatment effects (chemotherapy, hormone therapy) are dynamic
-- Biological markers (ER, HER2) exhibit evolving risk patterns
-
-### Clinical Insight
-
-This suggests that:
-
-- Survival risk is not constant over follow-up
-- Treatment effects may vary between early and late survival
-- Biological factors influence survival differently across time
-
-### Key Learning
-
-- Cox model assumptions must always be tested
-- Real-world clinical data often violate proportional hazards
-- Advanced models are required for valid inference
-
-### Next Steps
-
-- Fit Stratified Cox model
-- Implement time-varying Cox model
-
-## Stratified Cox Model
-### Purpose
-To address proportional hazards violations observed in the baseline Cox model.
-
-### Approach
-Stratified by:
-- ER status
-- Chemotherapy
-
-### Completed:
-- Fitted a stratified Cox model
-- Stratified by ER status and chemotherapy
-- Estimated adjusted effects for key clinical variables
-
-### Learning:
-- Stratification allows different baseline hazards across groups
-- It helps handle categorical variables that violate PH assumption
-- Stratified variables are no longer interpreted via hazard ratios
-
-### Key results:
-- Age, lymph nodes, and NPI remain strong predictors
-- Radiotherapy shows a consistent protective effect
-- Model performance improved (C-index increased)
-
-### Key insight:
-- The baseline Cox model was misspecified due to PH violations
-- Stratification improved model validity and interpretability
-- Some variables are better treated as strata rather than predictors
-- Not all variables should be modeled with fixed hazard ratios, some require flexible baseline risk structures.
-
-## PH Diagnostics After Stratified Cox Model
-
-### Purpose
-To evaluate whether stratification successfully addressed proportional hazards (PH) violations observed in the baseline Cox model.
-
-### Approach
-- Applied Schoenfeld residual-based PH tests (`cox.zph`)
-- Generated diagnostic plots for time-varying effects
-- Compared results with baseline Cox model
-
-### Completed:
-- Performed PH test on stratified Cox model
-- Generated statistical summary table
-- Plotted Schoenfeld residuals for visual inspection
-
-### Learning:
-- Stratification reduced PH violations for categorical variables (ER status, chemotherapy)
-- Continuous variables can still violate PH even after stratification
-- Schoenfeld residual plots provide intuitive insight into time-varying effects
-
-### Key results:
-- AGE_AT_DIAGNOSIS → significant violation (time-dependent effect)
-- NPI → strong violation (major time-varying predictor)
-- LYMPH_NODES_EXAMINED_POSITIVE → no strong violation
-- RADIO_THERAPY → stable over time
-- GLOBAL test → still significant (model not fully valid)
-
-### Interpretation:
-- Stratification successfully improved model validity but did not fully resolve PH violations
-- Continuous predictors such as age and NPI have effects that change over time
-- The assumption of constant hazard ratios does not hold for all variables
-
-### Key insight:
-- Stratified Cox models are effective for handling categorical PH violations
-- Continuous covariates often require explicit modeling of time-dependent effects
-- Real-world clinical risk is dynamic, not constant over time
-
-### Conceptual understanding:
-- Cox model assumes:
-  - constant hazard ratios over time
-- Your data shows:
-  - hazard ratios vary with time → violation of PH assumption
-- This is a signal to move beyond standard Cox modeling
-
-### Conclusion:
-- The current model is improved but still not fully adequate
-- A more flexible modeling approach is required
-## Time-Varying Cox Model
-
-### Purpose
-To address the remaining proportional hazards (PH) violations observed in continuous predictors (AGE_AT_DIAGNOSIS and NPI) after fitting the stratified Cox model.
-
-### Approach
-- Fitted a Cox model with time-dependent covariates using the `tt()` function
-- Modeled time interaction as:
-  - AGE_AT_DIAGNOSIS × log(time + 1)
-  - NPI × log(time + 1)
-- Retained key predictors:
-  - LYMPH_NODES_EXAMINED_POSITIVE
-  - RADIO_THERAPY
-  - CHEMOTHERAPY
-- Continued stratification by ER status
-
-### Completed:
-- Fitted time-varying Cox model
-- Estimated coefficients and hazard ratios
-- Saved model outputs and summary tables
-- Compared performance with previous models
-
-### Learning:
-- Continuous predictors often exhibit time-dependent effects in survival data
-- Time-varying Cox models relax the assumption of constant hazard ratios
-- Interaction with time (e.g., log(t+1)) allows flexible modeling of dynamic risk
-- Interpretation of coefficients changes — effects are no longer static
-
-### Key results:
-- AGE_AT_DIAGNOSIS → strong time-varying effect (p < 2e-16)
-- NPI → significant time-dependent effect (p < 1e-5)
-- LYMPH_NODES_EXAMINED_POSITIVE → stable predictor
-- RADIO_THERAPY → consistent protective effect
-- CHEMOTHERAPY → associated with higher hazard (likely confounding)
-
-### Model performance:
-- Concordance index improved to ~0.677
-- Best predictive performance among all models so far
-
-### Interpretation:
-- The effect of age increases over time, suggesting long-term survival is more influenced by age
-- The prognostic impact of NPI evolves during follow-up
-- Treatment effects (radiotherapy) remain stable
-- Chemotherapy effect reflects clinical selection bias rather than causal effect
-
-### Key insight:
-- Hazard ratios are not constant in real-world clinical data
-- Static Cox models may oversimplify survival dynamics
-- Time-varying Cox models provide a more realistic representation of risk
-
-### Conceptual understanding:
-- Standard Cox:
-  - assumes β is constant
-- Time-varying Cox:
-  - allows β(t), i.e., effect changes with time
-- This aligns better with biological and clinical processes
-
-### Conclusion:
-- Time-varying Cox model resolves major remaining PH violations
-- Provides the most valid and realistic model for this dataset
-- Represents the final and most appropriate modeling approach so far
-
-### Next step:
-- Perform model comparison (baseline vs stratified vs time-varying)
-- Evaluate predictive performance (C-index, time-dependent AUC)
-- Assess calibration of predictions
-
-## Model Comparison
-
-### Purpose
-To compare the performance and validity of different Cox-based models developed throughout the pipeline:
-- Baseline Cox model
-- Stratified Cox model
-- Time-varying Cox model
-
-### Approach
-- Compared models using concordance index (C-index)
-- Evaluated statistical validity based on proportional hazards (PH) assumption diagnostics
-- Assessed interpretability and clinical relevance of each model
-
-### Completed:
-- Extracted C-index for all models
-- Compared model performance quantitatively
-- Reviewed assumption validity across models
-- Identified the most appropriate final model
-
-### Results:
-- Baseline Cox Model → C-index ≈ 0.665  
-- Stratified Cox Model → C-index ≈ 0.672  
-- Time-Varying Cox Model → C-index ≈ 0.677  
-
-### Interpretation:
-- Stratified Cox model improved performance by addressing categorical PH violations
-- Time-varying Cox model further improved performance by modeling dynamic effects of continuous variables
-- Incremental improvement in C-index reflects better representation of underlying survival dynamics
-
-### Key Insight:
-- Model assumptions strongly influence predictive performance
-- Addressing PH violations leads to both:
-  - improved model validity  
-  - improved discrimination (C-index)
-
-### Conceptual Understanding:
-- Baseline Cox:
-  - assumes constant hazard ratios → violated in real data
-- Stratified Cox:
-  - allows different baseline hazards for categorical variables
-- Time-varying Cox:
-  - allows coefficients to change over time → most realistic
-
-### Conclusion:
-- The time-varying Cox model is the preferred final model
-- It provides:
-  - best predictive performance  
-  - most appropriate handling of PH violations  
-  - most realistic representation of clinical risk  
-
-### Note:
-- Time-dependent AUC was not implemented due to limitations with time-varying Cox models using standard workflows
-- Model comparison was therefore based primarily on concordance and diagnostic validity
-
-### Next step:
-- Explore penalized Cox regression for feature selection and model stability
-- Extend analysis using machine learning approaches (e.g., Random Survival Forest)
-
-## Penalized Cox Model
-
-### Purpose
-To assess variable stability and perform regularized feature selection using LASSO-penalized Cox regression.
-
-### Approach
-- Built a design matrix from clinical predictors
-- Applied cross-validated LASSO Cox regression using `glmnet`
-- Selected the optimal penalty using cross-validation
-
-### Completed
-- Fitted penalized Cox model
-- Generated cross-validation plot
-- Extracted non-zero coefficients
-- Saved selected variables and model objects
-
-### Learning
-- LASSO shrinks weak coefficients toward zero
-- It helps identify a reduced set of stable predictors
-- Penalized Cox complements standard Cox by focusing on robustness rather than classical inference
-
-### Key results
-Variables retained after penalization included:
-- CHEMOTHERAPYYES
-- RADIO_THERAPYYES
-- HER2_SNP6NEUTRAL
-- NPI
-- ER_IHCPositve
-- HER2_SNP6LOSS
-- LYMPH_NODES_EXAMINED_POSITIVE
-- AGE_AT_DIAGNOSIS
-
-### Interpretation
-- Age, lymph nodes, and NPI remain stable risk factors
-- Radiotherapy retains a protective direction
-- Chemotherapy remains associated with higher hazard, consistent with earlier models
-- Penalization supports the stability of the main clinical findings
-
-### Key insight
-- The core prognostic signal remains consistent across standard Cox, stratified/time-varying Cox, and penalized Cox
-- This strengthens confidence in the overall modeling conclusions
-
-### Next step
-- Explore Random Survival Forest as a machine learning survival model
-
-## Random Survival Forest
-
-### Purpose
-To extend the survival analysis pipeline using a machine learning model capable of capturing non-linear effects and interactions without relying on proportional hazards assumptions.
-
-### Approach
-- Fitted a Random Survival Forest (RSF) using clinical predictors
-- Used 500 trees with log-rank splitting rule
-- Evaluated model performance using out-of-bag (OOB) error
-- Extracted variable importance rankings
-
-### Completed
-- Trained RSF model on cleaned survival dataset
-- Computed OOB error and derived C-index
-- Generated variable importance table
-- Visualized variable importance
-
-### Learning
-- RSF does not assume proportional hazards
-- It captures non-linear relationships and interactions automatically
-- Variable importance provides a different perspective compared to regression coefficients
-- Machine learning models can complement statistical models in survival analysis
-
-### Key results
-Top predictors:
-- AGE_AT_DIAGNOSIS  
-- LYMPH_NODES_EXAMINED_POSITIVE  
-- NPI  
-
-Lower importance:
-- HER2_SNP6  
-- CHEMOTHERAPY  
-- RADIO_THERAPY  
-
-Minimal importance:
-- ER_IHC  
-- CELLULARITY  
-- HORMONE_THERAPY  
+---
+
+## Critical Reflection
+This stage is often treated as administrative, but it directly impacts:
+- scientific credibility  
+- debugging efficiency  
+- collaboration potential  
+
+Poor structure at this stage often leads to:
+- irreproducible results  
+- accidental data leakage  
+- unclear modeling logic  
+
+---
+
+## Next Step
+Perform detailed inspection of the dataset
+
+---
+
+# 2. Data Inspection & Structural Understanding
+
+## Objective
+To understand the dataset’s structure, variable types, missingness patterns, and clinical plausibility.
+
+---
+
+## Implementation (What I did)
+- Loaded dataset into analysis environment  
+- Removed metadata rows beginning with `#`  
+- Parsed data into a structured dataframe  
+- Examined:
+  - number of observations and variables  
+  - column names and data types  
+  - summary statistics (mean, median, ranges)  
+- Investigated survival endpoints:
+  - OS (Overall Survival)  
+  - RFS (Relapse-Free Survival)  
+- Quantified missing values across variables  
+
+---
+
+## Results (What I got)
+- Dataset size: **2509 observations × 24 variables**  
+- Identified key survival fields:
+  - OS_MONTHS, OS_STATUS  
+  - RFS_MONTHS, RFS_STATUS  
+- Event variables stored as text labels (not model-ready)  
+- Missing values concentrated in:
+  - OS_MONTHS  
+  - NPI  
+  - lymph node variables  
+- Clinical variables (age, NPI) show realistic distributions  
+
+---
+
+## Interpretation
+The dataset is appropriate for survival analysis, but requires preprocessing:
+
+- Survival analysis requires:
+  \[
+  (Y_i, \delta_i, X_i)
+  \]
+
+- Text-based event indicators must be converted  
+- Missing survival times make observations unusable  
+
+---
+
+## Critical Reflection
+The missingness pattern is unlikely to be random:
+
+\[
+P(Missing \mid X) \neq P(Missing)
+\]
+
+This suggests potential:
+- selection bias  
+- informative missingness  
+
+Ignoring this could bias hazard estimates and reduce generalizability.
+
+---
+
+## Next Step
+Construct analysis-ready survival datasets
+
+---
+
+# 3. Data Cleaning & Transformation
+
+## Objective
+To convert raw clinical data into a format suitable for survival modeling.
+
+---
+
+## Implementation (What I did)
+- Converted survival status variables into binary indicators:
+  - OS_STATUS → OS_EVENT  
+  - RFS_STATUS → RFS_EVENT  
+- Standardized variable types:
+  - numeric → continuous variables  
+  - categorical → factors  
+- Removed observations with missing survival times  
+- Created separate datasets:
+  - OS dataset  
+  - RFS dataset  
+- Saved cleaned datasets to `/clean`
+
+---
+
+## Results (What I got)
+- OS dataset reduced in size due to missing follow-up  
+- RFS dataset retained more observations  
+- Each dataset contains **13 analysis-ready variables**  
+
+---
+
+## Interpretation
+The dataset now satisfies survival model requirements:
+
+\[
+(Y_i, \delta_i, X_i)
+\]
+
+This enables:
+- likelihood-based estimation  
+- valid hazard modeling  
+
+---
+
+## Critical Reflection
+Removing missing data simplifies modeling but introduces trade-offs:
+- reduced statistical power  
+- potential selection bias  
+
+Alternative approaches (not implemented here):
+- multiple imputation  
+- inverse probability weighting  
+
+---
+
+## Next Step
+Estimate survival functions using Kaplan-Meier
+
+---
+
+# 4. Kaplan-Meier Survival Estimation
+
+## Objective
+To estimate survival probabilities without parametric assumptions.
+
+---
+
+## Theory
+\[
+\hat{S}(t) = \prod_{t_i \le t} \left(1 - \frac{d_i}{n_i} \right)
+\]
+
+---
+
+## Implementation (What I did)
+- Computed Kaplan-Meier curves for:
+  - Overall Survival (OS)  
+  - Relapse-Free Survival (RFS)  
+- Generated survival plots with confidence intervals  
+- Saved figures to `/results/figures`
+
+---
+
+## Results (What I got)
+- RFS curve declines more rapidly than OS  
+- Confidence intervals widen substantially at later time points  
+- Stepwise drops correspond to event occurrences  
+
+---
+
+## Interpretation
+- Relapse events occur earlier than mortality  
+- Survival probability decreases over time as expected  
+- Late-time estimates are unstable due to small risk sets  
+
+---
+
+## Critical Reflection
+Kaplan-Meier provides:
+- descriptive insight  
+- no adjustment for covariates  
+
+Thus, it cannot:
+- explain *why* survival differs  
+- control for confounding  
+
+---
+
+## Next Step
+Compare survival across groups using log-rank test
+
+---
+
+# 5. Log-Rank Test
+
+## Objective
+To test whether survival distributions differ between groups.
+
+---
+
+## Implementation (What I did)
+- Compared survival curves for:
+  - ER status  
+  - Hormone therapy  
+- Computed log-rank test statistics and p-values  
+
+---
+
+## Results (What I got)
+- ER status: p = 0.11 → not statistically significant  
+- Hormone therapy: p < 0.001 → strong difference  
+
+---
+
+## Interpretation
+Hormone therapy appears associated with improved survival.
+
+---
+
+## Critical Reflection
+This result is likely confounded:
+
+\[
+\text{Treatment assignment} \neq \text{random}
+\]
+
+- High-risk patients are more likely to receive treatment  
+- Observed association does not imply causality  
+
+Log-rank test limitations:
+- unadjusted  
+- assumes proportional hazards  
+
+---
+
+## Next Step
+Fit multivariate Cox model
+
+---
+
+# 6. Cox Proportional Hazards Model
+
+## Objective
+To estimate adjusted effects of multiple predictors on survival.
+
+---
+
+## Theory
+\[
+h(t|X) = h_0(t)\exp(\beta^T X)
+\]
+
+---
+
+## Implementation (What I did)
+- Fitted multivariate Cox model including:
+  - age  
+  - NPI  
+  - lymph nodes  
+  - treatment variables  
+- Estimated hazard ratios  
+- Computed concordance index  
+
+---
+
+## Results (What I got)
+
+Strong predictors:
+- Age: HR ≈ 1.04  
+- Lymph nodes: HR ≈ 1.05  
+- NPI: HR ≈ 1.20  
+
+Treatment effects:
+- Chemotherapy: HR ≈ 1.54  
+- Radiotherapy: HR ≈ 0.74  
 
 Model performance:
-- C-index ≈ 0.667
+- C-index ≈ 0.665  
 
-### Interpretation
-- Age, lymph nodes, and NPI remain the dominant predictors of survival
-- Treatment variables show lower importance compared to disease severity variables
-- RSF confirms the main findings from Cox-based models
+---
 
-### Key insight
-- Core prognostic variables are consistent across statistical and machine learning models
-- Flexible non-linear modeling does not significantly improve performance in this dataset
-- Strong clinical signals can be captured effectively even by simpler models
+## Interpretation
+- Disease severity variables dominate survival risk  
+- Treatment effects reflect confounding by indication  
+- Adjustment changes conclusions from univariable analysis  
 
-### Conclusion
-- Random Survival Forest validates the robustness of the main predictors
-- It serves as a complementary approach rather than outperforming Cox models
+---
 
-### Next step
-- Perform calibration analysis to assess prediction accuracy and reliability
+## Critical Reflection
+The model assumes:
 
-## Calibration Analysis
+\[
+\beta(t) = \text{constant}
+\]
 
-### Purpose
-To evaluate how well predicted survival probabilities match observed outcomes.
+This assumption must be tested before trusting results.
 
-### Approach
-- Used bootstrap calibration via `rms::calibrate`
-- Evaluated predictions at 60 months
+---
 
-### Completed
-- Generated calibration plot
-- Compared predicted vs observed survival probabilities
+## Next Step
+Evaluate proportional hazards assumption
 
-### Key results
-- Model predictions are systematically higher than observed survival
-- Calibration curve lies below the ideal diagonal line
+---
 
-### Interpretation
-- The model overestimates survival probabilities
-- Discrimination is reasonable, but calibration is suboptimal
-- The model is better at ranking patients than predicting absolute risk
+# 7. PH Assumption Diagnostics
 
-### Key insight
-- Good discrimination (C-index) does not guarantee good calibration
-- Accurate clinical prediction requires both
+## Objective
+To test validity of Cox model assumptions.
 
-### Conclusion
-- The model provides useful relative risk estimates
-- However, absolute survival probabilities should be interpreted with caution
+---
+
+## Implementation (What I did)
+- Applied Schoenfeld residual test  
+- Generated residual plots  
+
+---
+
+## Results (What I got)
+- Global test: p < 2e-16  
+- Multiple variables show time-dependent effects  
+
+---
+
+## Interpretation
+\[
+\beta(t) \neq \beta
+\]
+
+- Hazard ratios are not constant  
+- Model is misspecified  
+
+---
+
+## Critical Reflection
+This is expected in clinical data:
+- biological processes evolve  
+- treatment effects change over time  
+
+---
+
+## Next Step
+Apply model extensions (stratified and time-varying)
+
+---
+
+# 9. Time-Varying Cox Model
+
+## Implementation (What I did)
+- Modeled time interactions:
+  - Age × log(t)  
+  - NPI × log(t)  
+
+---
+
+## Results (What I got)
+- Significant time-dependent effects  
+- Best model performance: C-index ≈ 0.677  
+
+---
+
+## Interpretation
+- Risk factors evolve dynamically  
+- Model better reflects real-world survival processes  
+
+---
+
+## Critical Reflection
+This model relaxes unrealistic assumptions and provides:
+- more accurate inference  
+- better predictive performance  
+
+---
+
+# Final Insight
+
+The central challenge in survival analysis is:
+
+\[
+\text{modeling time-dependent risk, not static effects}
+\]
+
+---
+
+# Future Work
+- Time-dependent AUC  
+- External validation  
+- Causal survival modeling  
+- Deep learning approaches  
