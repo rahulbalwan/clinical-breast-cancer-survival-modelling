@@ -429,6 +429,18 @@ This reflects a robust modeling framework where:
 - Calibration analysis (evaluate prediction accuracy and reliability)  
 - Final model interpretation and reporting  
 
+### Task 14: Calibration Analysis
+- Evaluated model calibration using bootstrap resampling
+- Compared predicted vs observed survival probabilities
+
+### Results
+- Model shows systematic overestimation of survival probabilities
+- Calibration curve lies below the ideal line
+
+### Key Insight
+- Model has reasonable discrimination but imperfect calibration
+- Highlights the difference between ranking risk and estimating absolute probabilities
+
 
 ## Project Structure
 

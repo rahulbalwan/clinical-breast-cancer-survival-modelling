@@ -531,3 +531,33 @@ Model performance:
 
 ### Next step
 - Perform calibration analysis to assess prediction accuracy and reliability
+
+## Calibration Analysis
+
+### Purpose
+To evaluate how well predicted survival probabilities match observed outcomes.
+
+### Approach
+- Used bootstrap calibration via `rms::calibrate`
+- Evaluated predictions at 60 months
+
+### Completed
+- Generated calibration plot
+- Compared predicted vs observed survival probabilities
+
+### Key results
+- Model predictions are systematically higher than observed survival
+- Calibration curve lies below the ideal diagonal line
+
+### Interpretation
+- The model overestimates survival probabilities
+- Discrimination is reasonable, but calibration is suboptimal
+- The model is better at ranking patients than predicting absolute risk
+
+### Key insight
+- Good discrimination (C-index) does not guarantee good calibration
+- Accurate clinical prediction requires both
+
+### Conclusion
+- The model provides useful relative risk estimates
+- However, absolute survival probabilities should be interpreted with caution
