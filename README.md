@@ -366,6 +366,69 @@ This reflects a robust modeling framework where:
 - Calibration analysis (evaluate prediction accuracy)  
 - Final model interpretation and reporting  
 
+### Task 13: Random Survival Forest
+
+Extended the survival analysis pipeline using:
+- Random Survival Forest (RSF)
+- Non-linear, tree-based survival modeling
+- Variable importance analysis
+
+Evaluated using:
+- Out-of-bag (OOB) performance error
+- Variable importance rankings
+- Comparison with Cox-based models
+
+### Results
+
+Top predictors identified by RSF:
+- AGE_AT_DIAGNOSIS  
+- LYMPH_NODES_EXAMINED_POSITIVE  
+- NPI  
+
+Lower importance:
+- HER2_SNP6  
+- CHEMOTHERAPY  
+- RADIO_THERAPY  
+
+Minimal importance:
+- ER_IHC  
+- CELLULARITY  
+- HORMONE_THERAPY  
+
+Model performance:
+- RSF C-index ≈ 0.667
+
+### Key Insight
+
+- Random Survival Forest confirms the importance of core prognostic variables
+- Age, lymph nodes, and NPI remain the dominant survival predictors
+- Machine learning did not significantly outperform the best Cox-based model in this dataset
+- Flexible non-linear modeling supports, rather than overturns, the main clinical findings
+
+---
+
+## Updated Understanding
+
+The modeling pipeline now demonstrates:
+
+- Baseline Cox model → initial relationships but violated assumptions  
+- Stratified Cox model → improved handling of categorical PH violations  
+- Time-varying Cox model → most realistic representation of survival dynamics  
+- Random Survival Forest → confirms variable importance under a flexible machine learning framework  
+
+This reflects a robust modeling framework where:
+
+- Core clinical predictors consistently drive survival outcomes  
+- Findings are stable across both statistical and machine learning models  
+- Increased model complexity does not necessarily improve predictive performance  
+
+---
+
+## Next Steps
+
+- Calibration analysis (evaluate prediction accuracy and reliability)  
+- Final model interpretation and reporting  
+
 
 ## Project Structure
 
