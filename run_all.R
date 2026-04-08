@@ -1,4 +1,5 @@
-# run_all.R
+# run_all.R for complete execution of the survival analysis pipeline
+# This script will run all the individual scripts in sequence to execute the entire analysis pipeline.
 
 source("scripts/00_setup.R")
 source("scripts/01_inspect_data.R")
