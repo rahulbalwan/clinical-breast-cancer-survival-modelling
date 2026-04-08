@@ -1,287 +1,205 @@
 # Survival Analysis Project — Learning Journal
 
 This journal documents the full analytical process of a survival analysis project, combining:
-- rigorous statistical theory  
-- detailed implementation steps  
+- rigorous statistical reasoning  
+- step-by-step implementation  
 - empirical results  
-- critical interpretation and reflection  
+- critical reflection  
 
-The objective is not only to build models, but to develop a **deep understanding of time-to-event data, model assumptions, and real-world clinical complexity**.
+The goal is not just to build models, but to develop a **deep understanding of time-to-event data, model assumptions, and real-world clinical complexity**.
 
 ---
 
 # 1. Project Setup & Analytical Framing
 
 ## Objective
-To establish a structured, reproducible, and logically sequenced workflow for survival analysis.
+To establish a structured, reproducible workflow for survival analysis.
 
----
+## Implementation
+I designed a modular pipeline reflecting the natural progression of analysis:
+setup → cleaning → classical survival → diagnostics → advanced models → validation
 
-## Implementation (What I did)
-I began by designing a modular pipeline reflecting the natural progression of statistical modeling:
 
-setup → cleaning → classical survival → diagnostics → advanced models → validation  
-
-I created the following directory structure:
-- `/raw` → immutable original dataset  
+Project structure:
+- `/raw` → immutable source data  
 - `/clean` → processed datasets  
-- `/results` → outputs, plots, and model summaries  
+- `/results` → outputs (plots, tables, models)  
 
-Git was initialized at the very beginning to track:
+Git was initialized from the start to track:
 - data transformations  
 - modeling decisions  
 - iterative refinements  
 
----
-
-## Results (What I got)
-- A clean, organized project structure  
-- Full version history of all steps  
+## Results
+- Clean and reproducible structure  
+- Full version control history  
 - Clear separation between raw and processed data  
 
----
-
 ## Interpretation
-This setup ensures:
-- **reproducibility** → every step can be recreated  
-- **data integrity** → raw data is never overwritten  
-- **traceability** → all analytical changes are documented  
-
----
+This ensures:
+- **Reproducibility** → every step can be recreated  
+- **Data integrity** → raw data remains unchanged  
+- **Traceability** → all analytical decisions are documented  
 
 ## Critical Reflection
-This stage is often treated as administrative, but it directly impacts:
+This stage is often underestimated, but it directly affects:
 - scientific credibility  
 - debugging efficiency  
-- collaboration potential  
+- collaboration  
 
-Poor structure at this stage often leads to:
+Poor setup can lead to:
 - irreproducible results  
-- accidental data leakage  
+- data leakage  
 - unclear modeling logic  
-
----
-
-## Next Step
-Perform detailed inspection of the dataset
 
 ---
 
 # 2. Data Inspection & Structural Understanding
 
 ## Objective
-To understand the dataset’s structure, variable types, missingness patterns, and clinical plausibility.
+To understand dataset structure, variable types, missingness, and clinical plausibility.
 
----
-
-## Implementation (What I did)
-- Loaded dataset into analysis environment  
-- Removed metadata rows beginning with `#`  
-- Parsed data into a structured dataframe  
+## Implementation
+- Loaded and parsed dataset  
+- Removed metadata rows (`#`)  
 - Examined:
-  - number of observations and variables  
-  - column names and data types  
-  - summary statistics (mean, median, ranges)  
-- Investigated survival endpoints:
-  - OS (Overall Survival)  
-  - RFS (Relapse-Free Survival)  
-- Quantified missing values across variables  
+  - dimensions  
+  - variable types  
+  - summary statistics  
+- Identified endpoints:
+  - Overall Survival (OS)  
+  - Relapse-Free Survival (RFS)  
+- Assessed missingness  
 
----
-
-## Results (What I got)
-- Dataset size: **2509 observations × 24 variables**  
-- Identified key survival fields:
-  - OS_MONTHS, OS_STATUS  
-  - RFS_MONTHS, RFS_STATUS  
-- Event variables stored as text labels (not model-ready)  
-- Missing values concentrated in:
+## Results
+- Dataset: **2509 observations × 24 variables**  
+- Event variables stored as text labels  
+- Missingness observed in:
   - OS_MONTHS  
   - NPI  
   - lymph node variables  
-- Clinical variables (age, NPI) show realistic distributions  
-
----
 
 ## Interpretation
-The dataset is appropriate for survival analysis, but requires preprocessing:
 
-- Survival analysis requires:
-  \[
-  (Y_i, \delta_i, X_i)
-  \]
+Survival analysis requires:
+ - (time, event indicator, covariates)
 
-- Text-based event indicators must be converted  
-- Missing survival times make observations unusable  
 
----
+The dataset is suitable, but requires preprocessing before modeling.
 
 ## Critical Reflection
-The missingness pattern is unlikely to be random:
 
-\[
-P(Missing \mid X) \neq P(Missing)
-\]
+Missingness is likely **not random**, meaning:
 
-This suggests potential:
-- selection bias  
-- informative missingness  
-
-Ignoring this could bias hazard estimates and reduce generalizability.
-
----
-
-## Next Step
-Construct analysis-ready survival datasets
+- certain patient groups may be systematically missing data  
+- this can introduce **selection bias**  
+- estimates may not generalize to the full population  
 
 ---
 
 # 3. Data Cleaning & Transformation
 
 ## Objective
-To convert raw clinical data into a format suitable for survival modeling.
+To construct analysis-ready survival datasets.
 
----
-
-## Implementation (What I did)
-- Converted survival status variables into binary indicators:
-  - OS_STATUS → OS_EVENT  
-  - RFS_STATUS → RFS_EVENT  
+## Implementation
+- Converted event variables:
+  - OS_STATUS → OS_EVENT (0/1)
+  - RFS_STATUS → RFS_EVENT (0/1)
 - Standardized variable types:
-  - numeric → continuous variables  
-  - categorical → factors  
+  - numeric → continuous  
+  - categorical → factor  
 - Removed observations with missing survival times  
-- Created separate datasets:
+- Created:
   - OS dataset  
   - RFS dataset  
-- Saved cleaned datasets to `/clean`
 
----
-
-## Results (What I got)
-- OS dataset reduced in size due to missing follow-up  
-- RFS dataset retained more observations  
-- Each dataset contains **13 analysis-ready variables**  
-
----
+## Results
+- Reduced dataset size due to missing values  
+- Fully model-ready datasets created  
 
 ## Interpretation
+
 The dataset now satisfies survival model requirements:
+ - (time, event, covariates)
 
-\[
-(Y_i, \delta_i, X_i)
-\]
 
-This enables:
-- likelihood-based estimation  
-- valid hazard modeling  
-
----
+This enables valid likelihood-based modeling.
 
 ## Critical Reflection
-Removing missing data simplifies modeling but introduces trade-offs:
-- reduced statistical power  
-- potential selection bias  
 
-Alternative approaches (not implemented here):
+Removing missing data:
+- simplifies modeling  
+- but reduces sample size  
+- and may introduce bias  
+
+Alternative approaches:
 - multiple imputation  
 - inverse probability weighting  
 
 ---
 
-## Next Step
-Estimate survival functions using Kaplan-Meier
-
----
-
-# 4. Kaplan-Meier Survival Estimation
+# 4. Kaplan–Meier Survival Estimation
 
 ## Objective
 To estimate survival probabilities without parametric assumptions.
 
----
+## Concept
 
-## Theory
-\[
-\hat{S}(t) = \prod_{t_i \le t} \left(1 - \frac{d_i}{n_i} \right)
-\]
+Kaplan-Meier estimates survival as:
+S(t) = product over event times of (1 - events at time t / individuals at risk at time t)
 
----
 
-## Implementation (What I did)
-- Computed Kaplan-Meier curves for:
+## Implementation
+- Estimated KM curves for:
   - Overall Survival (OS)  
   - Relapse-Free Survival (RFS)  
-- Generated survival plots with confidence intervals  
-- Saved figures to `/results/figures`
+- Generated plots with confidence intervals  
 
----
-
-## Results (What I got)
-- RFS curve declines more rapidly than OS  
-- Confidence intervals widen substantially at later time points  
-- Stepwise drops correspond to event occurrences  
-
----
+## Results
+- RFS declines faster than OS  
+- Confidence intervals widen over time  
+- Stepwise drops reflect event timing  
 
 ## Interpretation
-- Relapse events occur earlier than mortality  
-- Survival probability decreases over time as expected  
-- Late-time estimates are unstable due to small risk sets  
-
----
+- Relapse occurs earlier than death  
+- Late estimates are unstable due to fewer patients at risk  
 
 ## Critical Reflection
-Kaplan-Meier provides:
-- descriptive insight  
-- no adjustment for covariates  
+Kaplan-Meier is:
+- descriptive  
+- unadjusted  
 
-Thus, it cannot:
-- explain *why* survival differs  
+It does not:
 - control for confounding  
-
----
-
-## Next Step
-Compare survival across groups using log-rank test
+- explain causal relationships  
 
 ---
 
 # 5. Log-Rank Test
 
 ## Objective
-To test whether survival distributions differ between groups.
+To compare survival distributions across groups.
 
----
-
-## Implementation (What I did)
-- Compared survival curves for:
+## Implementation
+- Compared:
   - ER status  
   - Hormone therapy  
-- Computed log-rank test statistics and p-values  
+- Computed log-rank p-values  
 
----
-
-## Results (What I got)
-- ER status: p = 0.11 → not statistically significant  
-- Hormone therapy: p < 0.001 → strong difference  
-
----
+## Results
+- ER status: not significant  
+- Hormone therapy: highly significant  
 
 ## Interpretation
 Hormone therapy appears associated with improved survival.
 
----
-
 ## Critical Reflection
-This result is likely confounded:
 
-\[
-\text{Treatment assignment} \neq \text{random}
-\]
+This is likely **confounding by indication**:
 
-- High-risk patients are more likely to receive treatment  
-- Observed association does not imply causality  
+- higher-risk patients receive more treatment  
+- treatment is not randomly assigned  
 
 Log-rank test limitations:
 - unadjusted  
@@ -289,156 +207,81 @@ Log-rank test limitations:
 
 ---
 
-## Next Step
-Fit multivariate Cox model
-
----
-
 # 6. Cox Proportional Hazards Model
 
 ## Objective
-To estimate adjusted effects of multiple predictors on survival.
+To estimate adjusted effects of predictors on survival.
 
----
+## Concept
 
-## Theory
-\[
-h(t|X) = h_0(t)\exp(\beta^T X)
-\]
+Cox model: hazard(t | X) = baseline hazard × exp(beta × X)
 
----
 
-## Implementation (What I did)
-- Fitted multivariate Cox model including:
+## Implementation
+- Fitted multivariable model including:
   - age  
   - NPI  
   - lymph nodes  
-  - treatment variables  
-- Estimated hazard ratios  
-- Computed concordance index  
+  - treatments  
 
----
-
-## Results (What I got)
-
+## Results
 Strong predictors:
-- Age: HR ≈ 1.04  
-- Lymph nodes: HR ≈ 1.05  
-- NPI: HR ≈ 1.20  
+- Age (HR ~ 1.04)  
+- Lymph nodes (HR ~ 1.05)  
+- NPI (HR ~ 1.20)  
 
-Treatment effects:
-- Chemotherapy: HR ≈ 1.54  
-- Radiotherapy: HR ≈ 0.74  
-
-Model performance:
+Performance:
 - C-index ≈ 0.665  
 
----
-
 ## Interpretation
-- Disease severity variables dominate survival risk  
-- Treatment effects reflect confounding by indication  
-- Adjustment changes conclusions from univariable analysis  
-
----
+- Disease severity dominates survival risk  
+- Adjustment changes conclusions from univariate analysis  
 
 ## Critical Reflection
-The model assumes:
 
-\[
-\beta(t) = \text{constant}
-\]
+Key assumption:
+- Effect of each variable is constant over time
 
-This assumption must be tested before trusting results.
 
----
 
-## Next Step
-Evaluate proportional hazards assumption
+This must be tested before trusting results.
 
 ---
 
-# 7. PH Assumption Diagnostics
+# 7. Proportional Hazards Diagnostics
 
 ## Objective
-To test validity of Cox model assumptions.
+To test Cox model validity.
 
----
+## Implementation
+- Schoenfeld residual tests  
+- Diagnostic plots  
 
-## Implementation (What I did)
-- Applied Schoenfeld residual test  
-- Generated residual plots  
-
----
-
-## Results (What I got)
-- Global test: p < 2e-16  
-- Multiple variables show time-dependent effects  
-
----
+## Results
+- Global test highly significant  
+- Multiple variables violate assumptions  
 
 ## Interpretation
-\[
-\beta(t) \neq \beta
-\]
+Good ranking ≠ accurate probabilities
 
-- Hazard ratios are not constant  
-- Model is misspecified  
-
----
 
 ## Critical Reflection
-This is expected in clinical data:
-- biological processes evolve  
-- treatment effects change over time  
-
----
-
-## Next Step
-Apply model extensions (stratified and time-varying)
-
----
-
-# 9. Time-Varying Cox Model
-
-## Implementation (What I did)
-- Modeled time interactions:
-  - Age × log(t)  
-  - NPI × log(t)  
-
----
-
-## Results (What I got)
-- Significant time-dependent effects  
-- Best model performance: C-index ≈ 0.677  
-
----
-
-## Interpretation
-- Risk factors evolve dynamically  
-- Model better reflects real-world survival processes  
-
----
-
-## Critical Reflection
-This model relaxes unrealistic assumptions and provides:
-- more accurate inference  
-- better predictive performance  
+Calibration is critical for:
+- clinical decision-making  
+- risk communication  
 
 ---
 
 # Final Insight
 
-The central challenge in survival analysis is:
+The central challenge in survival analysis is: modeling time-dependent risk, not static effects
 
-\[
-\text{modeling time-dependent risk, not static effects}
-\]
 
 ---
 
 # Future Work
+
 - Time-dependent AUC  
 - External validation  
-- Causal survival modeling  
-- Deep learning approaches  
+- Causal survival inference  
+- Deep learning survival models  
