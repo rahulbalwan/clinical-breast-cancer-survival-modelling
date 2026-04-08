@@ -249,7 +249,7 @@ Clinical breast cancer patient-level dataset containing:
 
 ## Project Structure
 
-```text
+```
 breast-cancer-survival-analysis/
 │
 ├── app.R            # Shiny dashboard
@@ -259,7 +259,7 @@ breast-cancer-survival-analysis/
 ├── results/         # outputs (figures, tables, models)
 ├── notes/           # learning journal + interpretations
 ├── README.md
-
+```
 ## Learning Approach
 
 This project is built incrementally with a focus on:

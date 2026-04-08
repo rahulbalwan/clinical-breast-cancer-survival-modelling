@@ -1,0 +1,10 @@
+name: breast-cancer-survival-dashboard
+title:
+username: rrahul
+account: rrahul
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17060920
+bundleId: 11822806
+url: https://rrahul.shinyapps.io/breast-cancer-survival-dashboard/
+version: 1

@@ -6,7 +6,7 @@ library(survminer)
 library(readr)
 
 # Load the Cox model fit
-cox_model <- readRDS("results/tables/cox_model_fit.rds")
+cox_model <- readRDS("results/models/cox_model_fit.rds")
 
 # PH test using Schoenfeld residuals
 ph_test <- cox.zph(cox_model)
