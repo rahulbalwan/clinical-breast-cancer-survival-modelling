@@ -1,4 +1,4 @@
-# Clinical Breast Cancer Survival Analysis
+# Breast Cancer Survival Analysis
 
 ![R](https://img.shields.io/badge/R-Statistical%20Computing-276DC3?logo=r&logoColor=white)
 ![Survival Analysis](https://img.shields.io/badge/Analysis-Survival-blueviolet)
@@ -8,9 +8,27 @@
 
 ## Overview
 
-This repository presents an end-to-end survival analysis pipeline using clinical breast cancer data. The project is developed incrementally from scratch to understand each stage of a survival analysis workflow in R — from raw data preprocessing to advanced modeling, diagnostics, and validation.
+This repository presents an end-to-end survival analysis pipeline using clinical breast cancer data. The project was developed incrementally from scratch to build a practical understanding of each stage of a survival analysis workflow in R — from raw data preprocessing to advanced modeling, diagnostics, validation, and interactive visualization.
 
-The analysis focuses on time-to-event outcomes, integrating statistical rigor with clinically meaningful interpretation.
+The analysis focuses on time-to-event outcomes and combines statistical rigor with clinically meaningful interpretation.
+
+---
+
+## Live Dashboard
+
+Interactive Shiny dashboard:  
+**[Breast Cancer Survival Dashboard](https://rrahul.shinyapps.io/breast-cancer-survival-dashboard/)**
+
+The dashboard allows interactive exploration of:
+- Overall Survival (OS) and Relapse-Free Survival (RFS)
+- Kaplan–Meier curves and log-rank tests
+- Adjusted Cox proportional hazards models
+- Proportional hazards diagnostics
+- Model comparison and validation
+- Penalized Cox regression
+- Random Survival Forest results
+- Calibration analysis
+- Filtered cohort-level data summaries
 
 ---
 
@@ -32,7 +50,8 @@ To build a deep, practical understanding of survival analysis by systematically 
 - Cox proportional hazards modeling  
 - Proportional hazards diagnostics  
 - Model comparison and validation  
-- Advanced modeling (time-varying effects, penalization, machine learning)
+- Advanced modeling (time-varying effects, penalization, machine learning)  
+- Interactive communication through a Shiny dashboard  
 
 ---
 
@@ -61,7 +80,7 @@ Clinical breast cancer patient-level dataset containing:
 ## Analysis Pipeline
 
 ### Task 1–2: Data Inspection & Cleaning
-- Loaded and structured raw clinical dataset  
+- Loaded and structured the raw clinical dataset  
 - Handled missing values and variable types  
 - Created survival-ready datasets:
   - `clean/os_data.csv`
@@ -75,7 +94,7 @@ Clinical breast cancer patient-level dataset containing:
 **Key Observations:**
 - Overall survival declines gradually  
 - Relapse occurs earlier than death  
-- Early-phase differences are clinically meaningful  
+- Early-phase differences may be clinically meaningful  
 
 ---
 
@@ -87,19 +106,19 @@ Clinical breast cancer patient-level dataset containing:
 - Hormone therapy: significant  
 
 **Insight:**
-- Treatment effects may be more influential than receptor status alone  
+- Treatment-related grouping appeared more strongly associated with survival than receptor status alone in unadjusted analysis  
 
 ---
 
 ### Task 5–6: Cox Proportional Hazards Model
-- Fitted multivariable Cox model  
+- Fitted a multivariable Cox model  
 
 **Significant predictors:**
 - Age at diagnosis  
 - Lymph node involvement  
 - Nottingham Prognostic Index (NPI)  
 - Chemotherapy  
-- Radiotherapy (protective)  
+- Radiotherapy (protective association)  
 - HER2 subtype  
 
 **Performance:**
@@ -107,19 +126,19 @@ Clinical breast cancer patient-level dataset containing:
 
 **Clinical insight:**
 - Disease severity dominates survival outcomes  
-- Treatment effects are confounded by indication  
+- Treatment effects should be interpreted cautiously because of confounding by indication  
 
 ---
 
 ### Task 7: Proportional Hazards Diagnostics
-- Tested PH assumption using Schoenfeld residuals  
+- Tested the PH assumption using Schoenfeld residuals  
 
 **Results:**
 - Significant violations for multiple predictors  
 - Global test highly significant  
 
 **Conclusion:**
-> Baseline Cox model is not fully valid due to PH violations  
+> The baseline Cox model is not fully valid under the proportional hazards assumption
 
 ---
 
@@ -128,16 +147,16 @@ Clinical breast cancer patient-level dataset containing:
 
 **Results:**
 - Improved model performance (C-index ≈ 0.672)  
-- Better handling of categorical violations  
+- Better handling of categorical PH violations  
 
 ---
 
 ### Task 9: PH Diagnostics After Stratification
-- Re-tested PH assumption  
+- Re-tested the PH assumption  
 
 **Findings:**
 - Reduced violations  
-- Remaining issues in continuous variables (age, NPI)  
+- Remaining issues in continuous variables such as age and NPI  
 
 ---
 
@@ -152,7 +171,7 @@ Clinical breast cancer patient-level dataset containing:
   - C-index ≈ **0.677** (best model)  
 
 **Key Insight:**
-> Hazard ratios are not constant — risk evolves over time  
+> Hazard ratios are not constant over follow-up time — risk evolves dynamically
 
 ---
 
@@ -165,8 +184,8 @@ Clinical breast cancer patient-level dataset containing:
 | Time-varying Cox | ~0.677 |
 
 **Insight:**
-- Addressing assumptions improves both validity and performance  
-- Time-varying Cox provides the most realistic representation  
+- Addressing model assumptions improves both validity and predictive performance  
+- The time-varying Cox model provides the most realistic representation of risk in this dataset  
 
 ---
 
@@ -174,18 +193,20 @@ Clinical breast cancer patient-level dataset containing:
 - Applied LASSO for feature selection  
 
 **Results:**
-- Stable predictors:
-  - Age, lymph nodes, NPI  
+- Stable predictors included:
+  - Age  
+  - Lymph nodes  
+  - NPI  
   - Treatment variables  
   - HER2 subtypes  
 
 **Insight:**
-> Core predictors remain stable under regularization  
+> Core predictors remain stable under regularization
 
 ---
 
 ### Task 13: Random Survival Forest
-- Applied machine learning survival model  
+- Applied a machine learning survival model  
 
 **Results:**
 - Top predictors:
@@ -196,51 +217,48 @@ Clinical breast cancer patient-level dataset containing:
   - C-index ≈ 0.667  
 
 **Insight:**
-- ML confirms predictor importance  
-- Does not outperform well-specified Cox models  
+- Machine learning confirmed the importance of core prognostic variables  
+- It did not outperform a well-specified Cox framework  
 
 ---
 
 ### Task 14: Calibration Analysis
-- Evaluated predicted vs observed survival  
+- Evaluated predicted versus observed survival probability  
 
 **Results:**
-- Model overestimates survival probability  
-- Calibration curve below ideal line  
+- The model overestimates survival probability  
+- The calibration curve lies below the ideal line  
 
 **Insight:**
-> Good discrimination ≠ good calibration  
+> Good discrimination does not guarantee good calibration
 
 ---
 
 ## Key Takeaways
 
-- Survival data often violate modeling assumptions  
-- Risk is dynamic, not constant over time  
+- Survival data often violate standard modeling assumptions  
+- Risk is dynamic rather than constant over time  
 - Model validation is as important as model fitting  
 - Core predictors are robust across:
   - Cox models  
   - Penalized models  
   - Machine learning models  
-- Increased complexity does not guarantee better performance  
+- Increased complexity does not necessarily produce better clinical prediction  
 
 ---
 
 ## Project Structure
 
-```
+```text
 breast-cancer-survival-analysis/
 │
-├── scripts/        # R scripts for each step
-├── raw/            # raw dataset
-├── clean/          # cleaned datasets
-├── results/        # outputs (figures, tables, models)
-├── notes/          # learning journal + interpretations
+├── app.R            # Shiny dashboard
+├── scripts/         # R scripts for each analysis step
+├── raw/             # raw dataset
+├── clean/           # cleaned datasets
+├── results/         # outputs (figures, tables, models)
+├── notes/           # learning journal + interpretations
 ├── README.md
-```
-
----
-
 
 ## Learning Approach
 
@@ -262,7 +280,7 @@ Each step is documented with:
 **Rahul**
 
 - MSc Medical Statistics & Health Data Science  
-  *(University of Bristol, UK – Sept 2026)*  
+  *(University of Bristol, UK)*  
 - MSc Statistics  
   *(Indian Institute of Technology Kanpur, India)*  
 
