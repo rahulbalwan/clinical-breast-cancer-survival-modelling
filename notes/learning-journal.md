@@ -139,9 +139,9 @@ To estimate survival probabilities without parametric assumptions.
 ## Concept
 Kaplan–Meier estimator:
 
-\[
+$$
 S(t) = \prod_{t_i \le t} \left(1 - \frac{d_i}{n_i}\right)
-\]
+$$
 
 ## Implementation
 - Estimated survival curves for:
