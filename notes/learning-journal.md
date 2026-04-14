@@ -205,9 +205,9 @@ Limitations of log-rank test:
 To estimate adjusted associations between predictors and survival.
 
 ## Concept
-\[
+$$
 h(t | X) = h_0(t) \exp(\beta X)
-\]
+$$
 
 ## Implementation
 Fitted a multivariable Cox model including:
